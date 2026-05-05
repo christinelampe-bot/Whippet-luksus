@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Whippet Luksus – Oslos første mobile hundedagplass eksklusivt for whippets. Hjemmehenting, naturopplevelser og premium omsorg i Oslo-regionen.">
+  <meta property="og:title" content="Whippet Luksus – Mobil Hundedagplass Oslo">
+  <meta property="og:description" content="Vi henter din whippet, tar dem på eventyr og bringer dem hjem – glad, sliten og full av gode inntrykk.">
+  <title>Whippet Luksus – Mobil Hundedagplass Oslo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      --gold:         #C49A3C;
+      --gold-light:   #E8C46A;
+      --gold-pale:    #FAF5E8;
+      --gold-bg:      #F5EDD3;
+      --forest:       #1A3828;
+      --forest-mid:   #2D5C40;
+      --forest-light: #4A7A5A;
+      --cream:        #F7F3EA;
+      --white:        #FFFFFF;
+      --dark:         #161818;
+      --text:         #363636;
+      --text-muted:   #707070;
+      --border:       #E4D9C0;
+      --shadow-sm:    0 2px 12px rgba(26,56,40,.08);
+      --shadow-md:    0 8px 40px rgba(26,56,40,.14);
+      --shadow-lg:    0 20px 80px rgba(26,56,40,.2);
+      --r:            4px;
+      --r-lg:         14px;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; font-size:16px; }
+    body {
+      font-family:'Jost', system-ui, sans-serif;
+      background:var(--cream);
+      color:var(--text);
+      line-height:1.75;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,h4 {
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-weight:400; line-height:1.15;
+    }
+    a { color:inherit; text-decoration:none; }
+    img { max-width:100%; display:block; }
+
+    .container {
+      max-width:1160px;
+      margin:0 auto;
+      padding:0 clamp(1.25rem, 5vw, 3rem);
+    }
+
+    /* ─────────────────────────────────────────────
+       NAVIGATION
+    ───────────────────────────────────────────── */
+    .nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      padding:1.5rem 0;
+      transition:background .4s, box-shadow .4s, padding .35s;
+    }
+    .nav.scrolled {
+      background:rgba(247,243,234,.95);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      box-shadow:var(--shadow-sm);
+      padding:1rem 0;
+    }
+    .nav__inner {
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .nav__logo {
+      display:flex; align-items:center; gap:.75rem;
+    }
+    .nav__logo-mark { width:38px; height:38px; flex-shrink:0; }
+    .nav__logo-text {
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.25rem; font-weight:500;
+      color:var(--forest);
+      letter-spacing:.04em;
+    }
+    .nav.scrolled .nav__logo-text { color:var(--forest); }
+    .nav:not(.scrolled) .nav__logo-text { color:var(--gold-pale); }
+
+    .nav__links {
+      display:flex; align-items:center; gap:1.75rem;
+      list-style:none;
+    }
+    .nav__links a {
+      font-size:.82rem; font-weight:400;
+      letter-spacing:.09em; text-transform:uppercase;
+      transition:opacity .2s;
+    }
+    .nav:not(.scrolled) .nav__links a { color:rgba(247,243,234,.8); }
+    .nav.scrolled    .nav__links a { color:var(--forest); opacity:.75; }
+    .nav__links a:hover { opacity:1 !important; }
+
+    .nav__cta {
+      background:var(--gold) !important;
+      color:var(--dark) !important;
+      opacity:1 !important;
+      padding:.45rem 1.2rem !important;
+      border-radius:2px;
+      transition:background .2s !important;
+    }
+    .nav:not(.scrolled) .nav__cta { background:var(--gold) !important; }
+    .nav__cta:hover { background:var(--gold-light) !important; }
+
+    .nav__burger {
+      display:none;
+      flex-direction:column; gap:5px;
+      cursor:pointer; padding:.3rem; background:none; border:none;
+    }
+    .nav__burger span {
+      display:block; width:22px; height:2px;
+      border-radius:2px; transition:transform .3s, opacity .3s;
+    }
+    .nav:not(.scrolled) .nav__burger span { background:var(--gold-pale); }
+    .nav.scrolled      .nav__burger span { background:var(--forest); }
+
+    /* Mobile drawer */
+    .nav__mobile {
+      display:none;
+      position:fixed; top:0; left:0; right:0; bottom:0; z-index:190;
+      background:var(--forest);
+      flex-direction:column; align-items:center; justify-content:center;
+      gap:2rem;
+    }
+    .nav__mobile.open { display:flex; }
+    .nav__mobile a {
+      font-family:'Cormorant Garamond', serif;
+      font-size:2rem; color:var(--gold-pale);
+      letter-spacing:.04em; font-style:italic;
+    }
+    .nav__mobile a:hover { color:var(--gold); }
+    .nav__mobile-close {
+      position:absolute; top:1.5rem; right:1.5rem;
+      background:none; border:none; color:var(--gold-pale);
+      font-size:1.75rem; cursor:pointer;
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    .hero {
+      min-height:100vh;
+      background:linear-gradient(150deg, var(--forest) 0%, var(--forest-mid) 55%, #3D6E50 100%);
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+      padding:8rem 0 7rem;
+    }
+    /* Glow orbs */
+    .hero__orb1 {
+      position:absolute; top:-8%; right:-4%;
+      width:65vw; height:65vw; max-width:900px; max-height:900px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(196,154,60,.18) 0%, transparent 68%);
+      pointer-events:none;
+    }
+    .hero__orb2 {
+      position:absolute; bottom:-18%; left:-8%;
+      width:55vw; height:55vw; max-width:700px; max-height:700px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(196,154,60,.1) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    .hero__content {
+      text-align:center;
+      position:relative; z-index:1;
+      max-width:920px;
+      animation:fadeUp .9s ease both;
+    }
+    .hero__eyebrow {
+      display:inline-flex; align-items:center; gap:.875rem;
+      font-size:.75rem; font-weight:500;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold-light);
+      margin-bottom:2.25rem;
+    }
+    .hero__eyebrow::before, .hero__eyebrow::after {
+      content:''; width:40px; height:1px;
+      background:var(--gold-light); opacity:.55;
+    }
+    .hero__title {
+      font-size:clamp(3.25rem, 9vw, 7.5rem);
+      color:var(--gold-pale);
+      letter-spacing:-.025em;
+      margin-bottom:.5rem;
+      text-shadow:0 4px 40px rgba(0,0,0,.2);
+    }
+    .hero__title em {
+      font-style:italic; color:var(--gold-light);
+    }
+    .hero__tagline {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(1.1rem, 2.8vw, 1.5rem);
+      font-style:italic; font-weight:300;
+      color:rgba(247,243,234,.72);
+      max-width:580px;
+      margin:1.25rem auto 3rem;
+    }
+    /* Whippet silhouette */
+    .hero__silhouette {
+      margin:0 auto 2.5rem;
+      opacity:.22;
+      pointer-events:none;
+    }
+    .hero__actions {
+      display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position:absolute; bottom:2.5rem; left:50%;
+      transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:.6rem;
+      animation:bounce 2.2s ease-in-out infinite;
+    }
+    .scroll-indicator__label {
+      font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(247,243,234,.45);
+    }
+    .scroll-indicator__line {
+      width:1px; height:52px;
+      background:linear-gradient(to bottom, rgba(196,154,60,.65), transparent);
+    }
+
+    /* ─────────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:1rem 2rem;
+      font-family:'Jost', sans-serif;
+      font-size:.82rem; font-weight:500;
+      letter-spacing:.12em; text-transform:uppercase;
+      border:none; cursor:pointer;
+      border-radius:var(--r);
+      transition:all .25s;
+    }
+    .btn--primary {
+      background:var(--gold); color:var(--dark);
+    }
+    .btn--primary:hover {
+      background:var(--gold-light);
+      transform:translateY(-2px);
+      box-shadow:0 8px 32px rgba(196,154,60,.4);
+    }
+    .btn--outline {
+      background:transparent;
+      color:var(--gold-pale);
+      border:1px solid rgba(247,243,234,.3);
+    }
+    .btn--outline:hover {
+      border-color:var(--gold-light);
+      color:var(--gold-light);
+      transform:translateY(-2px);
+    }
+    .btn--forest {
+      background:var(--forest); color:var(--gold-pale);
+    }
+    .btn--forest:hover {
+      background:var(--forest-mid);
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-md);
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION LAYOUT
+    ───────────────────────────────────────────── */
+    .section {
+      padding:clamp(4rem, 10vw, 8rem) 0;
+    }
+    .section--alt  { background:var(--white); }
+    .section--cream { background:var(--cream); }
+    .section--dark {
+      background:var(--forest); color:var(--gold-pale);
+    }
+    .section__header {
+      text-align:center;
+      margin-bottom:clamp(2.5rem, 6vw, 4.5rem);
+    }
+    .section__eyebrow {
+      display:block;
+      font-size:.72rem; font-weight:500;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:.875rem;
+    }
+    .section--dark .section__eyebrow { color:var(--gold-light); }
+    .section__title {
+      font-size:clamp(2rem, 5vw, 3.6rem);
+      color:var(--forest);
+    }
+    .section--dark .section__title { color:var(--gold-pale); }
+    .section__lead {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(1.05rem, 2.5vw, 1.35rem);
+      font-style:italic;
+      color:var(--text-muted);
+      max-width:560px; margin:1rem auto 0;
+    }
+    .section--dark .section__lead { color:rgba(247,243,234,.6); }
+
+    /* ─────────────────────────────────────────────
+       HOW IT WORKS
+    ───────────────────────────────────────────── */
+    .steps {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+      gap:1.75rem;
+    }
+    .step {
+      text-align:center;
+      padding:2.75rem 2rem 2.25rem;
+      background:var(--cream);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      position:relative;
+      transition:transform .35s, box-shadow .35s;
+    }
+    .step:hover { transform:translateY(-8px); box-shadow:var(--shadow-md); }
+    .step__num {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:44px; height:44px;
+      border-radius:50%;
+      background:var(--forest);
+      color:var(--gold);
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.35rem;
+      margin-bottom:1.25rem;
+    }
+    .step__icon { font-size:2.5rem; margin-bottom:.875rem; display:block; }
+    .step__title {
+      font-size:1.4rem; color:var(--forest);
+      margin-bottom:.625rem;
+    }
+    .step__text { font-size:.88rem; color:var(--text-muted); line-height:1.75; }
+
+    /* ─────────────────────────────────────────────
+       BREED SECTION
+    ───────────────────────────────────────────── */
+    .breed-features {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:0; border-radius:var(--r-lg);
+      overflow:hidden; box-shadow:var(--shadow-lg);
+    }
+    .breed-visual {
+      background:var(--forest);
+      padding:0;
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden; min-height:500px;
+    }
+    .breed-visual::before {
+      content:''; position:absolute; inset:0; z-index:1;
+      background:linear-gradient(to right, rgba(26,56,40,.55) 0%, rgba(26,56,40,.15) 60%, transparent 100%);
+      pointer-events:none;
+    }
+    .breed-visual__photo {
+      width:100%; height:100%;
+      object-fit:cover; object-position:center;
+      display:block;
+      min-height:500px;
+      filter:saturate(0.92) contrast(1.05);
+      transition:transform .6s ease;
+    }
+    .breed-visual:hover .breed-visual__photo { transform:scale(1.03); }
+    .breed-visual__caption {
+      position:absolute; bottom:1.5rem; left:1.5rem; z-index:2;
+      font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(247,243,234,.55);
+    }
+    .breed-visual__svg { position:relative; z-index:1; display:none; }
+    .breed-list {
+      background:var(--white);
+      padding:clamp(2.5rem, 5vw, 4rem);
+    }
+    .breed-list__title { font-size:clamp(1.75rem, 3.5vw, 2.4rem); color:var(--forest); }
+    .breed-list__sub {
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.1rem; font-style:italic;
+      color:var(--text-muted); margin:.5rem 0 1.75rem;
+    }
+    .breed-item {
+      display:flex; align-items:flex-start; gap:.875rem;
+      padding:.875rem 0;
+      border-bottom:1px solid var(--border);
+    }
+    .breed-item:last-child { border-bottom:none; }
+    .breed-item__icon {
+      width:36px; height:36px; min-width:36px;
+      border-radius:50%;
+      background:var(--gold-bg);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.95rem; margin-top:.1rem;
+    }
+    .breed-item__content h4 {
+      font-size:.95rem; color:var(--forest); margin-bottom:.2rem;
+    }
+    .breed-item__content p { font-size:.86rem; color:var(--text-muted); }
+
+    /* ─────────────────────────────────────────────
+       WEEKLY ROUTES
+    ───────────────────────────────────────────── */
+    .routes-tabs {
+      display:flex; gap:.5rem; flex-wrap:wrap;
+      justify-content:center; margin-bottom:2.5rem;
+    }
+    .route-tab {
+      padding:.6rem 1.6rem;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:2px;
+      cursor:pointer;
+      font-family:'Jost', sans-serif;
+      font-size:.78rem; font-weight:500;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--text-muted);
+      transition:all .2s;
+    }
+    .route-tab:hover { border-color:var(--forest); color:var(--forest); }
+    .route-tab.active {
+      background:var(--forest);
+      border-color:var(--forest);
+      color:var(--gold);
+    }
+    .route-panel {
+      display:none;
+      grid-template-columns:1fr 1fr;
+      gap:3rem; align-items:center;
+      animation:fadeIn .4s ease;
+    }
+    .route-panel.active { display:grid; }
+    .route-info__day {
+      font-size:.72rem; font-weight:500;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:.5rem;
+    }
+    .route-info__title { font-size:2.4rem; color:var(--forest); margin-bottom:1rem; }
+    .route-info__desc { color:var(--text-muted); font-size:.92rem; margin-bottom:1.5rem; line-height:1.75; }
+    .route-highlights { list-style:none; display:flex; flex-direction:column; gap:.6rem; }
+    .route-highlights li {
+      display:flex; align-items:flex-start; gap:.75rem;
+      font-size:.88rem; color:var(--text);
+    }
+    .route-highlights li::before {
+      content:'✦';
+      color:var(--gold); font-size:.65rem; margin-top:.35rem; flex-shrink:0;
+    }
+    .route-map {
+      border-radius:var(--r-lg); overflow:hidden;
+      box-shadow:var(--shadow-md); height:340px;
+      position:relative; display:flex; align-items:center; justify-content:center;
+    }
+    .route-map__bg {
+      position:absolute; inset:0;
+      background:linear-gradient(135deg, var(--forest), var(--forest-mid));
+    }
+    .route-map__content { position:relative; z-index:1; text-align:center; }
+    .route-map__icon { font-size:3.5rem; margin-bottom:1rem; display:block; }
+    .route-map__label {
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.4rem; font-style:italic;
+      color:var(--gold-pale);
+    }
+    .route-map__sub {
+      font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+      color:rgba(247,243,234,.5); margin-top:.5rem;
+    }
+    .route-map__badge {
+      display:inline-block;
+      background:rgba(196,154,60,.2);
+      border:1px solid rgba(196,154,60,.35);
+      color:var(--gold-light);
+      font-size:.68rem; letter-spacing:.12em;
+      text-transform:uppercase; padding:.3rem .875rem;
+      border-radius:20px; margin-top:1rem;
+    }
+    /* Per-day colour accent */
+    .route-panel[data-day="man"] .route-map__bg { background:linear-gradient(135deg, #1a3828, #2d5c40); }
+    .route-panel[data-day="tir"] .route-map__bg { background:linear-gradient(135deg, #1a2e40, #2d4f6a); }
+    .route-panel[data-day="ons"] .route-map__bg { background:linear-gradient(135deg, #252e1a, #435228); }
+    .route-panel[data-day="tor"] .route-map__bg { background:linear-gradient(135deg, #2e1e10, #6a3e20); }
+    .route-panel[data-day="fre"] .route-map__bg { background:linear-gradient(135deg, #1e1a2e, #3e2d5c); }
+
+    /* ─────────────────────────────────────────────
+       INCLUDED
+    ───────────────────────────────────────────── */
+    .included-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+      gap:1.5rem;
+    }
+    .included-card {
+      background:rgba(247,243,234,.07);
+      border:1px solid rgba(247,243,234,.12);
+      border-radius:var(--r-lg);
+      padding:2rem 1.5rem; text-align:center;
+      transition:transform .3s, background .3s;
+    }
+    .included-card:hover {
+      transform:translateY(-5px);
+      background:rgba(247,243,234,.11);
+    }
+    .included-card__icon { font-size:2.2rem; margin-bottom:.875rem; display:block; }
+    .included-card__title { font-size:1.1rem; color:var(--gold); margin-bottom:.5rem; }
+    .included-card__text { font-size:.83rem; color:rgba(247,243,234,.6); line-height:1.7; }
+
+    /* ─────────────────────────────────────────────
+       PRICING
+    ───────────────────────────────────────────── */
+    .pricing-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(290px, 1fr));
+      gap:1.75rem; margin-bottom:2.5rem;
+    }
+    .price-card {
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      padding:2.5rem 2.25rem;
+      position:relative;
+      transition:transform .35s, box-shadow .35s;
+    }
+    .price-card:hover { transform:translateY(-7px); box-shadow:var(--shadow-md); }
+    .price-card--featured {
+      background:var(--forest);
+      border-color:var(--forest);
+    }
+    .price-card__badge {
+      position:absolute; top:-13px; left:50%;
+      transform:translateX(-50%);
+      background:var(--gold); color:var(--dark);
+      font-size:.68rem; font-weight:600;
+      letter-spacing:.16em; text-transform:uppercase;
+      padding:.35rem 1.1rem; border-radius:20px;
+      white-space:nowrap;
+    }
+    .price-card__name {
+      font-size:.75rem; font-weight:500;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:.875rem;
+    }
+    .price-card--featured .price-card__name { color:var(--gold-light); }
+    .price-card__amount {
+      font-family:'Cormorant Garamond', serif;
+      font-size:3.75rem; font-weight:300;
+      color:var(--forest); line-height:1;
+    }
+    .price-card--featured .price-card__amount { color:var(--gold); }
+    .price-card__currency { font-size:1.4rem; vertical-align:super; margin-right:.1rem; }
+    .price-card__period {
+      font-size:.85rem; color:var(--text-muted); margin-top:.35rem; display:block;
+    }
+    .price-card--featured .price-card__period { color:rgba(247,243,234,.5); }
+    .price-card__desc {
+      font-size:.88rem; color:var(--text-muted);
+      margin:1rem 0 1.5rem; min-height:44px;
+    }
+    .price-card--featured .price-card__desc { color:rgba(247,243,234,.65); }
+    .price-card__features {
+      list-style:none; display:flex; flex-direction:column;
+      gap:.6rem; margin-bottom:2.25rem;
+    }
+    .price-card__features li {
+      display:flex; align-items:center; gap:.625rem;
+      font-size:.875rem;
+    }
+    .price-card--featured .price-card__features li { color:var(--gold-pale); }
+    .price-card__features li::before {
+      content:'✓';
+      width:20px; height:20px; min-width:20px;
+      border-radius:50%; flex-shrink:0;
+      background:rgba(196,154,60,.14);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.7rem; color:var(--gold);
+    }
+    .price-card--featured .price-card__features li::before { background:rgba(196,154,60,.25); }
+    .price-card__btn { width:100%; justify-content:center; }
+
+    .pricing-note {
+      text-align:center;
+      background:var(--gold-bg);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      padding:1.5rem 2rem;
+      font-size:.875rem; color:var(--text-muted);
+      line-height:2;
+    }
+    .pricing-note strong { color:var(--forest); }
+
+    /* ─────────────────────────────────────────────
+       SAFETY
+    ───────────────────────────────────────────── */
+    .safety-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:1.5rem; margin-top:3rem;
+    }
+    .safety-card {
+      background:rgba(247,243,234,.07);
+      border:1px solid rgba(247,243,234,.13);
+      border-radius:var(--r-lg);
+      padding:2rem 1.75rem;
+      transition:background .3s;
+    }
+    .safety-card:hover { background:rgba(247,243,234,.11); }
+    .safety-card__icon { font-size:2rem; margin-bottom:1rem; display:block; }
+    .safety-card__title { font-size:1.2rem; color:var(--gold); margin-bottom:.5rem; }
+    .safety-card__text { font-size:.86rem; color:rgba(247,243,234,.62); line-height:1.75; }
+
+    /* ─────────────────────────────────────────────
+       FORM
+    ───────────────────────────────────────────── */
+    .form-wrap {
+      max-width:700px; margin:0 auto;
+      background:var(--white);
+      border-radius:var(--r-lg);
+      padding:clamp(2rem, 5vw, 3.5rem);
+      box-shadow:var(--shadow-lg);
+    }
+    .form-grid {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:1.25rem;
+    }
+    .form-field { display:flex; flex-direction:column; gap:.4rem; }
+    .form-field--full { grid-column:1/-1; }
+    .form-field label {
+      font-size:.74rem; font-weight:500;
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--forest);
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      padding:.8rem 1rem;
+      background:var(--cream);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      font-family:'Jost', sans-serif;
+      font-size:.9rem; color:var(--text);
+      outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color:var(--forest);
+      box-shadow:0 0 0 3px rgba(26,56,40,.07);
+    }
+    .form-field textarea { resize:vertical; min-height:110px; }
+    .form-days { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .form-day { display:none; }
+    .form-day + label {
+      padding:.45rem 1rem;
+      border:1px solid var(--border);
+      border-radius:2px;
+      font-size:.76rem; letter-spacing:.1em; text-transform:uppercase;
+      cursor:pointer; color:var(--text-muted);
+      transition:all .2s; user-select:none;
+    }
+    .form-day:checked + label {
+      background:var(--forest);
+      border-color:var(--forest);
+      color:var(--gold);
+    }
+    .form-submit {
+      display:flex; flex-direction:column;
+      align-items:center; gap:.875rem; margin-top:.5rem;
+    }
+    .form-submit .btn { width:100%; justify-content:center; font-size:.88rem; }
+    .form-privacy { font-size:.76rem; color:var(--text-muted); text-align:center; }
+
+    .form-success {
+      display:none; text-align:center; padding:2.5rem 1.5rem;
+    }
+    .form-success__icon { font-size:4rem; margin-bottom:1.25rem; display:block; }
+    .form-success__title { font-size:2rem; color:var(--forest); margin-bottom:.625rem; }
+    .form-success__text {
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.15rem; font-style:italic;
+      color:var(--text-muted);
+    }
+
+    /* Error state */
+    .form-field input.error,
+    .form-field select.error { border-color:#c0392b; }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    .footer {
+      background:var(--dark);
+      color:rgba(247,243,234,.6);
+      padding:4.5rem 0 2rem;
+    }
+    .footer__grid {
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:3rem; margin-bottom:3rem;
+    }
+    .footer__brand-name {
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.6rem; color:var(--gold);
+      margin-bottom:.875rem;
+    }
+    .footer__brand-text { font-size:.86rem; line-height:1.8; max-width:300px; }
+    .footer__heading {
+      font-family:'Cormorant Garamond', serif;
+      font-size:.9rem; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--gold-pale); margin-bottom:1.25rem;
+    }
+    .footer__links {
+      list-style:none; display:flex; flex-direction:column; gap:.7rem;
+    }
+    .footer__links a {
+      font-size:.86rem; color:rgba(247,243,234,.5);
+      transition:color .2s;
+    }
+    .footer__links a:hover { color:var(--gold); }
+    .footer__bottom {
+      border-top:1px solid rgba(247,243,234,.09);
+      padding-top:1.75rem;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:.75rem;
+      font-size:.78rem; color:rgba(247,243,234,.3);
+    }
+    .footer__badge {
+      display:flex; align-items:center; gap:.5rem;
+      font-size:.76rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       ANIMATIONS
+    ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(32px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+    @keyframes bounce {
+      0%, 100% { transform:translateX(-50%) translateY(0); }
+      50%       { transform:translateX(-50%) translateY(9px); }
+    }
+
+    .reveal {
+      opacity:0; transform:translateY(22px);
+      transition:opacity .75s ease, transform .75s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    .reveal-delay-1 { transition-delay:.1s; }
+    .reveal-delay-2 { transition-delay:.2s; }
+    .reveal-delay-3 { transition-delay:.3s; }
+
+    /* ─────────────────────────────────────────────
+       PHOTO GALLERY
+    ───────────────────────────────────────────── */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      grid-template-rows:320px 280px;
+      gap:1rem;
+    }
+    /* Card 1: large landscape – top left */
+    .gallery-item:nth-child(1) { grid-column:1/8; grid-row:1; }
+    /* Card 2: portrait – top right */
+    .gallery-item:nth-child(2) { grid-column:8/13; grid-row:1; }
+    /* Card 3: medium – bottom left */
+    .gallery-item:nth-child(3) { grid-column:1/6; grid-row:2; }
+    /* Card 4: wide – bottom right */
+    .gallery-item:nth-child(4) { grid-column:6/13; grid-row:2; }
+
+    .gallery-item {
+      overflow:hidden;
+      border-radius:var(--r-lg);
+      position:relative;
+      background:var(--forest);  /* fallback while loading */
+    }
+    .gallery-item img {
+      width:100%; height:100%;
+      object-fit:cover; object-position:center;
+      display:block;
+      transition:transform .55s ease, filter .35s;
+      filter:saturate(0.9) contrast(1.05);
+    }
+    .gallery-item:hover img {
+      transform:scale(1.06);
+      filter:saturate(1.1) contrast(1.05);
+    }
+    /* Overlay on hover */
+    .gallery-item::after {
+      content:attr(data-caption);
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(26,56,40,.75) 0%, transparent 55%);
+      display:flex; align-items:flex-end;
+      padding:1.25rem 1.25rem;
+      font-family:'Cormorant Garamond', serif;
+      font-size:1rem; font-style:italic;
+      color:rgba(247,243,234,.9);
+      opacity:0;
+      transition:opacity .35s;
+    }
+    .gallery-item:hover::after { opacity:1; }
+    /* Always show caption on last item for visual interest */
+    .gallery-item:nth-child(4)::after { opacity:1; }
+
+    /* Shimmer placeholder while loading */
+    .gallery-item::before {
+      content:'';
+      position:absolute; inset:0; z-index:1;
+      background:linear-gradient(90deg,
+        rgba(247,243,234,.04) 0%,
+        rgba(196,154,60,.08) 50%,
+        rgba(247,243,234,.04) 100%
+      );
+      background-size:200% 100%;
+      animation:shimmer 1.8s infinite;
+    }
+    .gallery-item img.loaded ~ .gallery-item::before,
+    .gallery-item.img-loaded::before { animation:none; opacity:0; }
+
+    @keyframes shimmer {
+      0%   { background-position:200% 0; }
+      100% { background-position:-200% 0; }
+    }
+
+    .gallery-attribution {
+      text-align:center; margin-top:1.25rem;
+      font-size:.72rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--text-muted);
+    }
+    .gallery-attribution a { color:var(--gold); text-decoration:underline; text-underline-offset:3px; }
+
+    @media (max-width:900px) {
+      .gallery-grid {
+        grid-template-columns:1fr 1fr;
+        grid-template-rows:240px 240px;
+      }
+      .gallery-item:nth-child(1) { grid-column:1/3; grid-row:1; }
+      .gallery-item:nth-child(2) { grid-column:1/2; grid-row:2; }
+      .gallery-item:nth-child(3) { grid-column:2/3; grid-row:2; }
+      .gallery-item:nth-child(4) { display:none; }
+    }
+    @media (max-width:600px) {
+      .gallery-grid { grid-template-rows:220px 180px; gap:.625rem; }
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width:960px) {
+      .breed-features { grid-template-columns:1fr; }
+      .breed-visual { display:none; }
+      .route-panel.active { grid-template-columns:1fr; }
+      .route-map { height:240px; }
+      .footer__grid { grid-template-columns:1fr 1fr; }
+      .nav__links { display:none; }
+      .nav__burger { display:flex; }
+    }
+    @media (max-width:620px) {
+      .form-grid { grid-template-columns:1fr; }
+      .footer__grid { grid-template-columns:1fr; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .hero__actions { flex-direction:column; align-items:center; }
+      .hero__actions .btn { width:100%; max-width:320px; justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     MOBILE DRAWER
+════════════════════════════════════════════ -->
+<div class="nav__mobile" id="mobile-nav">
+  <button class="nav__mobile-close" id="mobile-close">✕</button>
+  <a href="#konsept"    onclick="closeMobile()">Konsept</a>
+  <a href="#rasen"      onclick="closeMobile()">Rasen</a>
+  <a href="#ruter"      onclick="closeMobile()">Ruter</a>
+  <a href="#priser"     onclick="closeMobile()">Priser</a>
+  <a href="#trygghet"   onclick="closeMobile()">Trygghet</a>
+  <a href="#pamelding"  onclick="closeMobile()" style="color:var(--gold)">Meld interesse</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <!-- Monogram mark -->
+        <svg class="nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="19" cy="19" r="19" fill="#1A3828"/>
+          <path d="M10 27 Q11 18 15 13.5 Q17.5 10.5 20 12 Q22.5 10.5 25 13.5 Q29 18 30 27"
+                stroke="#C49A3C" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path d="M13 27 Q15 22 19 22 Q23 22 25 27"
+                stroke="#C49A3C" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".6"/>
+        </svg>
+        <span class="nav__logo-text">Whippet Luksus</span>
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#konsept">Konsept</a></li>
+        <li><a href="#ruter">Ruter</a></li>
+        <li><a href="#priser">Priser</a></li>
+        <li><a href="#trygghet">Trygghet</a></li>
+        <li><a href="#pamelding" class="nav__cta">Meld interesse</a></li>
+      </ul>
+
+      <button class="nav__burger" id="burger" aria-label="Åpne meny">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero__orb1"></div>
+  <div class="hero__orb2"></div>
+  <div class="container">
+    <div class="hero__content">
+      <div class="hero__eyebrow">Oslo · Eksklusivt for Whippets</div>
+
+      <!-- Running whippet silhouette -->
+      <div class="hero__silhouette">
+        <svg width="440" height="130" viewBox="0 0 440 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Body arc -->
+          <path d="M 80 90 Q 110 55 155 52 Q 190 50 220 62 Q 255 75 280 62 Q 305 50 320 42 Q 338 30 355 38 Q 372 46 368 62 Q 364 75 348 80 Q 325 88 295 85 Q 270 82 250 90" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- Head/snout -->
+          <path d="M 348 80 Q 370 82 385 72 Q 400 62 405 50 Q 408 40 398 34 Q 388 28 378 34 Q 368 40 368 62" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Ear flap -->
+          <path d="M 378 34 Q 375 20 368 16 Q 361 22 362 34" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>
+          <!-- Tail curl -->
+          <path d="M 80 90 Q 58 80 48 65 Q 40 50 50 44" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Front legs (extended forward) -->
+          <path d="M 290 85 L 310 118" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 305 83 L 332 115" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+          <!-- Rear legs (extended back) -->
+          <path d="M 140 58 L 120 115" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 155 56 L 145 118" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+          <!-- Paw hints -->
+          <ellipse cx="310" cy="120" rx="8" ry="3.5" fill="white" opacity=".4"/>
+          <ellipse cx="332" cy="117" rx="7" ry="3" fill="white" opacity=".3"/>
+          <ellipse cx="120" cy="117" rx="8" ry="3.5" fill="white" opacity=".4"/>
+          <ellipse cx="145" cy="120" rx="7" ry="3" fill="white" opacity=".3"/>
+        </svg>
+      </div>
+
+      <h1 class="hero__title">Whippet <em>Luksus</em></h1>
+      <p class="hero__tagline">Mobil hundedagplass med hjemmehenting – skreddersydd for Oslos mest elegante firbente.</p>
+
+      <div class="hero__actions">
+        <a href="#pamelding" class="btn btn--primary">Meld interesse ✦</a>
+        <a href="#konsept" class="btn btn--outline">Se konseptet</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-indicator__line"></div>
+    <span class="scroll-indicator__label">Scroll</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════════ -->
+<section class="section section--alt" id="konsept">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Slik fungerer det</span>
+      <h2 class="section__title">En dag full av eventyr<br>– uten at du trenger å løfte en finger</h2>
+      <p class="section__lead">Vi henter din whippet hjemme, tar dem på nøye utvalgte turer i Oslo-regionen, og bringer dem hjem – slitne og glade.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal reveal-delay-1">
+        <span class="step__icon">🚐</span>
+        <div class="step__num">1</div>
+        <h3 class="step__title">Vi henter deg</h3>
+        <p class="step__text">Vår klimastyrte luksus-buggy stopper rett utenfor din dør. Din whippet ønskes ombord med varme og ro av erfarne hundepasser som kjenner rasen.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <span class="step__icon">🌿</span>
+        <div class="step__num">2</div>
+        <h3 class="step__title">Eventyr &amp; frihet</h3>
+        <p class="step__text">Daglige ruter med inngjerdete arealer der whippets kan boltre seg fritt. Naturopplevelser og sosial lek tilpasset rasens tempo og behov.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <span class="step__icon">📸</span>
+        <div class="step__num">3</div>
+        <h3 class="step__title">Bilder &amp; live-sporing</h3>
+        <p class="step__text">Du mottar oppdateringer, bilder og live GPS-sporing gjennom hele dagen. Ingen grunn til bekymring – vi holder deg informert hele veien.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <span class="step__icon">🏡</span>
+        <div class="step__num">4</div>
+        <h3 class="step__title">Trygg hjemkomst</h3>
+        <p class="step__text">Din whippet leveres hjem – trett og fornøyd. Du mottar et personlig dagskort med aktiviteter, humørnotat og eventuelle observasjoner.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PHOTO GALLERY
+════════════════════════════════════════════ -->
+<section class="section" id="galleri" style="padding-bottom:0;">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Galleriet</span>
+      <h2 class="section__title">Møt noen av<br>ukens løpere</h2>
+      <p class="section__lead">Elegante, raske og fulle av personlighet – det er whippeten i ett ord.</p>
+    </div>
+
+    <div class="gallery-grid reveal">
+
+      <!-- Card 1: Group of whippets – large landscape -->
+      <figure class="gallery-item"
+              data-caption="Whippets – skapt for å løpe sammen">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Whippets.jpg/1200px-Whippets.jpg"
+          alt="Flere whippets i fri bevegelse"
+          loading="lazy"
+          onload="this.parentElement.classList.add('img-loaded')"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#1A3828,#2D5C40)'"
+        >
+      </figure>
+
+      <!-- Card 2: Portrait close-up -->
+      <figure class="gallery-item"
+              data-caption="Det elegante ansiktet til en whippet">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Portretvipeta.JPG/800px-Portretvipeta.JPG"
+          alt="Nærportrett av en whippet"
+          loading="lazy"
+          onload="this.parentElement.classList.add('img-loaded')"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#252e1a,#435228)'"
+        >
+      </figure>
+
+      <!-- Card 3: Anakin portrait -->
+      <figure class="gallery-item"
+              data-caption="Stolt og selvsikker – typisk whippet">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Anakin_Whippet.jpg/800px-Anakin_Whippet.jpg"
+          alt="Whippet i naturlige omgivelser"
+          loading="lazy"
+          onload="this.parentElement.classList.add('img-loaded')"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#1e1a2e,#3e2d5c)'"
+        >
+      </figure>
+
+      <!-- Card 4: Urban whippet -->
+      <figure class="gallery-item"
+              data-caption="Urban eleganse – torsdagsruten gjennom Oslo">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Whippet_in_Tallinn.JPG/1200px-Whippet_in_Tallinn.JPG"
+          alt="Whippet i byomgivelser"
+          loading="lazy"
+          onload="this.parentElement.classList.add('img-loaded')"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#2e1e10,#6a3e20)'"
+        >
+      </figure>
+
+    </div>
+
+    <p class="gallery-attribution">
+      Bilder: <a href="https://commons.wikimedia.org/wiki/Category:Whippet" target="_blank" rel="noopener">Wikimedia Commons</a> · Lisens: CC BY-SA
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BREED SECTION
+════════════════════════════════════════════ -->
+<section class="section section--cream" id="rasen">
+  <div class="container">
+    <div class="breed-features reveal">
+
+      <!-- Visual panel – real whippet photo -->
+      <div class="breed-visual">
+        <img
+          class="breed-visual__photo"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Portretvipeta.JPG/800px-Portretvipeta.JPG"
+          alt="Elegant whippet portrett"
+          loading="lazy"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <!-- SVG fallback if image fails to load -->
+        <svg class="breed-visual__svg" width="280" height="320" viewBox="0 0 340 380" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="170" cy="200" r="155" fill="none" stroke="rgba(196,154,60,.1)" stroke-width="1"/>
+          <circle cx="170" cy="200" r="125" fill="none" stroke="rgba(196,154,60,.07)" stroke-width="1" stroke-dasharray="4 7"/>
+          <path d="M 80 240 Q 88 195 115 178 Q 140 162 168 168 Q 195 174 212 198 Q 222 215 218 242 Z" fill="rgba(196,154,60,.18)" stroke="rgba(196,154,60,.55)" stroke-width="1.5"/>
+          <path d="M 168 168 Q 195 148 210 122 Q 218 100 205 88 Q 192 78 184 90 Q 174 104 168 168" fill="rgba(196,154,60,.15)" stroke="rgba(196,154,60,.5)" stroke-width="1.5"/>
+          <path d="M 205 88 Q 214 62 228 44 Q 238 28 248 34 Q 258 40 252 56 Q 244 70 230 80 Q 218 88 210 122" fill="rgba(196,154,60,.18)" stroke="rgba(196,154,60,.55)" stroke-width="1.5"/>
+          <path d="M 248 34 Q 263 22 268 29 Q 270 38 262 46 Q 254 52 252 56" fill="rgba(196,154,60,.15)" stroke="rgba(196,154,60,.5)" stroke-width="1.2"/>
+          <circle cx="256" cy="36" r="3.5" fill="rgba(196,154,60,.8)"/>
+          <path d="M 238 26 Q 234 12 226 10 Q 221 16 223 27" fill="rgba(196,154,60,.25)" stroke="rgba(196,154,60,.5)" stroke-width="1"/>
+          <path d="M 80 240 Q 58 225 48 205 Q 40 185 50 175 Q 56 170 63 178" stroke="rgba(196,154,60,.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="97" y="242" width="12" height="65" rx="6" fill="rgba(196,154,60,.35)"/>
+          <rect x="118" y="242" width="10" height="60" rx="5" fill="rgba(196,154,60,.28)"/>
+          <rect x="193" y="242" width="12" height="65" rx="6" fill="rgba(196,154,60,.35)"/>
+          <rect x="210" y="242" width="10" height="60" rx="5" fill="rgba(196,154,60,.28)"/>
+          <text x="170" y="358" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="13" fill="rgba(196,154,60,.45)" letter-spacing="5">W H I P P E T</text>
+          <line x1="95" y1="344" x2="245" y2="344" stroke="rgba(196,154,60,.25)" stroke-width="1"/>
+        </svg>
+        <span class="breed-visual__caption">© Wikimedia Commons · CC BY-SA</span>
+      </div>
+
+      <!-- Feature list -->
+      <div class="breed-list">
+        <h2 class="breed-list__title">Skreddersydd for<br>den elegante løperen</h2>
+        <p class="breed-list__sub">Vi forstår whippeten – på innsiden og utsiden</p>
+
+        <div class="breed-item">
+          <div class="breed-item__icon">🌡️</div>
+          <div class="breed-item__content">
+            <h4>Kuldebeskyttelse</h4>
+            <p>Klimastyrt buggy og varme hvileunderlag. Whippets er sårbare for kulde – vi sørger for at Oslos vær aldri er et problem.</p>
+          </div>
+        </div>
+        <div class="breed-item">
+          <div class="breed-item__icon">⚡</div>
+          <div class="breed-item__content">
+            <h4>Fart og fri løping</h4>
+            <p>Alle turer inkluderer inngjerdete arealer for trygt, fritt løp uten bånd. Whippets er skapt for å sprinte – vi gir dem rom til det.</p>
+          </div>
+        </div>
+        <div class="breed-item">
+          <div class="breed-item__icon">🎯</div>
+          <div class="breed-item__content">
+            <h4>Kun whippets – alltid</h4>
+            <p>Ingen blandede grupper. Din hund er alltid omgitt av sin egen sort. Roligere, tryggere og mer tilpasset rasens dynamikk.</p>
+          </div>
+        </div>
+        <div class="breed-item">
+          <div class="breed-item__icon">🧠</div>
+          <div class="breed-item__content">
+            <h4>Rasespesialisert kunnskap</h4>
+            <p>Alle passere er opplærte i sighthound-adferd, stressindikatorer og kommunikasjonen som er unik for whippeten.</p>
+          </div>
+        </div>
+        <div class="breed-item">
+          <div class="breed-item__icon">💛</div>
+          <div class="breed-item__content">
+            <h4>Sensitiv og individuell omsorg</h4>
+            <p>Whippets er følsomme sjeler. Vi tilpasser aktivitetsnivå, sosiale interaksjoner og hvile til hvert enkelt individ.</p>
+          </div>
+        </div>
+        <div class="breed-item">
+          <div class="breed-item__icon">🏅</div>
+          <div class="breed-item__content">
+            <h4>Maksimalt 6 hunder per tur</h4>
+            <p>Liten gruppe = mer oppmerksomhet. Din whippet er aldri bare et nummer i mengden.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     WEEKLY ROUTES
+════════════════════════════════════════════ -->
+<section class="section section--alt" id="ruter">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Ukens ruter</span>
+      <h2 class="section__title">Nye eventyr –<br>hver eneste dag</h2>
+      <p class="section__lead">Rutene varierer for å gi din whippet rik variasjon i inntrykk, lukter og landskap gjennom hele uken.</p>
+    </div>
+
+    <div class="routes-tabs">
+      <button class="route-tab active" data-target="man">Mandag</button>
+      <button class="route-tab" data-target="tir">Tirsdag</button>
+      <button class="route-tab" data-target="ons">Onsdag</button>
+      <button class="route-tab" data-target="tor">Torsdag</button>
+      <button class="route-tab" data-target="fre">Fredag</button>
+    </div>
+
+    <!-- Monday -->
+    <div class="route-panel active" data-day="man" id="route-man">
+      <div class="route-info">
+        <div class="route-info__day">Mandag</div>
+        <h3 class="route-info__title">Vindern &amp;<br>Holmenkollen</h3>
+        <p class="route-info__desc">Start uken med frisk luft og utsikt. Skovstier i Nordmarka og de ikoniske bakkene ved Holmenkollen gir en rolig, naturintensiv ukestart – perfekt for sensitive whippets som trenger å lade opp.</p>
+        <ul class="route-highlights">
+          <li>Inngjerdete løpsarealer i Nordmarka-skogen</li>
+          <li>Naturstier med rik sanse- og luktemeny</li>
+          <li>Rolige omgivelser, lav stimuli – ideal for tause dager</li>
+          <li>Maks 6 whippets · opphenting 08:00–09:30</li>
+          <li>Retur: ca. 13:00–14:30</li>
+        </ul>
+      </div>
+      <div class="route-map">
+        <div class="route-map__bg"></div>
+        <div class="route-map__content">
+          <span class="route-map__icon">🌲</span>
+          <div class="route-map__label">Vindern &amp; Holmenkollen</div>
+          <div class="route-map__sub">Nordmarka · Skog · Utsikt over Oslo</div>
+          <div class="route-map__badge">🏔 ca. 320 moh</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tuesday -->
+    <div class="route-panel" data-day="tir" id="route-tir">
+      <div class="route-info">
+        <div class="route-info__day">Tirsdag</div>
+        <h3 class="route-info__title">Nordstrand</h3>
+        <p class="route-info__desc">Sjønær kystopplevelse langs Oslofjorden. Frisk havbris, fjordutsikt og åpne grøntarealer på Ekeberg gjør tirsdag til ukens mest sensorisk stimulerende tur – whippetens egne sanser på topp.</p>
+        <ul class="route-highlights">
+          <li>Kyststi langs Oslofjorden</li>
+          <li>Ekeberg naturreservat med åpent terreng</li>
+          <li>Sjøluft og fjordstimuli – sansene på full gass</li>
+          <li>Maks 6 whippets · opphenting 08:00–09:30</li>
+          <li>Retur: ca. 13:00–14:30</li>
+        </ul>
+      </div>
+      <div class="route-map">
+        <div class="route-map__bg"></div>
+        <div class="route-map__content">
+          <span class="route-map__icon">🌊</span>
+          <div class="route-map__label">Nordstrand</div>
+          <div class="route-map__sub">Oslofjorden · Ekeberg · Kyststi</div>
+          <div class="route-map__badge">⛵ Sjøutsikt</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wednesday -->
+    <div class="route-panel" data-day="ons" id="route-ons">
+      <div class="route-info">
+        <div class="route-info__day">Onsdag</div>
+        <h3 class="route-info__title">Høvik &amp; Jar</h3>
+        <p class="route-info__desc">Vestkorridorens grønne perler. Lysakerelvens stille vann og naturstier i eksklusive omgivelser gir en lun onsdagstur – variert terreng, åpne sletter og stille skogholt i ett og samme løp.</p>
+        <ul class="route-highlights">
+          <li>Lysakerelvens naturreservat og elvesti</li>
+          <li>Variert terreng – høyder, sletter og skogholt</li>
+          <li>Rolig, grønn forstadsidyll i vestkorridoren</li>
+          <li>Maks 6 whippets · opphenting 08:00–09:30</li>
+          <li>Retur: ca. 13:00–14:30</li>
+        </ul>
+      </div>
+      <div class="route-map">
+        <div class="route-map__bg"></div>
+        <div class="route-map__content">
+          <span class="route-map__icon">🍃</span>
+          <div class="route-map__label">Høvik &amp; Jar</div>
+          <div class="route-map__sub">Lysakerelveni · Elvesti · Vestkorridoren</div>
+          <div class="route-map__badge">🌿 Variert natur</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thursday -->
+    <div class="route-panel" data-day="tor" id="route-tor">
+      <div class="route-info">
+        <div class="route-info__day">Torsdag</div>
+        <h3 class="route-info__title">Oslo Sentrum</h3>
+        <p class="route-info__desc">Urban luksus – kulturopplevelse på fire poter. Frognerparken, promenaden langs Aker Brygge og bylivet gir byens whippets et helt annet stimuli-register og sosial trening i kontrollerte omgivelser.</p>
+        <ul class="route-highlights">
+          <li>Frognerparken – Oslos vakreste park</li>
+          <li>Aker Brygge-promenaden langs fjorden</li>
+          <li>Urban sansestimulering og sosial trening</li>
+          <li>Maks 4 whippets (urban rute) · opphenting 08:30–09:30</li>
+          <li>Retur: ca. 13:00–14:30</li>
+        </ul>
+      </div>
+      <div class="route-map">
+        <div class="route-map__bg"></div>
+        <div class="route-map__content">
+          <span class="route-map__icon">🏙️</span>
+          <div class="route-map__label">Oslo Sentrum</div>
+          <div class="route-map__sub">Frognerparken · Aker Brygge · By</div>
+          <div class="route-map__badge">🌆 Urban &amp; eksklusiv</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friday -->
+    <div class="route-panel" data-day="fre" id="route-fre">
+      <div class="route-info">
+        <div class="route-info__day">Fredag</div>
+        <h3 class="route-info__title">Lillestrøm &amp;<br>Rælingen</h3>
+        <p class="route-info__desc">Uken avsluttes med Den Store Sprintsession! Åpne jorder langs Nitelva i Rælingen gir whippets det de er skapt for – å fly. Denne turen er designet rundt maksimal galoppfrihet og meningsfull utmattelse.</p>
+        <ul class="route-highlights">
+          <li>Åpne jorder – maksimal sprintplass</li>
+          <li>Nitelva og elvelandskap langs Rælingen</li>
+          <li>Ukens store frihetssession – fullt gallop</li>
+          <li>Maks 6 whippets · opphenting 08:00–09:30</li>
+          <li>Retur: ca. 13:30–15:00 (litt lengre fredag!)</li>
+        </ul>
+      </div>
+      <div class="route-map">
+        <div class="route-map__bg"></div>
+        <div class="route-map__content">
+          <span class="route-map__icon">🌾</span>
+          <div class="route-map__label">Lillestrøm &amp; Rælingen</div>
+          <div class="route-map__sub">Nitelva · Åpne jorder · Sprintsession</div>
+          <div class="route-map__badge">🏃 Full gallop fredag</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INCLUDED
+════════════════════════════════════════════ -->
+<section class="section section--dark" id="inkludert">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Alt inkludert</span>
+      <h2 class="section__title">Premium fra dør til dør –<br>uten unntak</h2>
+      <p class="section__lead">Ingen skjulte kostnader. Ingen kompromisser. Det viktigste er allerede med.</p>
+    </div>
+
+    <div class="included-grid">
+      <div class="included-card reveal reveal-delay-1">
+        <span class="included-card__icon">🚐</span>
+        <h3 class="included-card__title">Luksus-buggy</h3>
+        <p class="included-card__text">Klimastyrt, hvilepolstret og spesialinnredet for whippets. Alltid ren, alltid varm.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-1">
+        <span class="included-card__icon">📍</span>
+        <h3 class="included-card__title">Live GPS-sporing</h3>
+        <p class="included-card__text">Se din whippet i sanntid. Du vet alltid nøyaktig hvor de er og hva de gjør.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-2">
+        <span class="included-card__icon">📸</span>
+        <h3 class="included-card__title">Bilder &amp; video</h3>
+        <p class="included-card__text">Profesjonelle øyeblikksbilder fra turen sendes direkte til din telefon underveis.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-2">
+        <span class="included-card__icon">🍦</span>
+        <h3 class="included-card__title">Pup Cup</h3>
+        <p class="included-card__text">Hundesikkert yoghurt-stopp på turen – vår lille signatur-tradisjon som alle elsker!</p>
+      </div>
+      <div class="included-card reveal reveal-delay-3">
+        <span class="included-card__icon">📋</span>
+        <h3 class="included-card__title">Daglig rapportkort</h3>
+        <p class="included-card__text">Detaljert rapport: aktiviteter, humør, appetitt, sosiale observasjoner og notater fra passerene.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-3">
+        <span class="included-card__icon">🩺</span>
+        <h3 class="included-card__title">Sertifisert førstehjelp</h3>
+        <p class="included-card__text">Alle passere er sertifisert i hundeførstehjelp. Veterinær på beredskap hele dagen.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-1">
+        <span class="included-card__icon">🧴</span>
+        <h3 class="included-card__title">Vann &amp; snacks</h3>
+        <p class="included-card__text">Friskt vann tilgjengelig hele turen. Godkjente snacks etter eierens instrukser og diettbehov.</p>
+      </div>
+      <div class="included-card reveal reveal-delay-2">
+        <span class="included-card__icon">🔒</span>
+        <h3 class="included-card__title">Forsikret ansvar</h3>
+        <p class="included-card__text">Fullstendig ansvarsforsikring under hele oppholdet. Din whippet er dekket fra vi henter til vi leverer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PRICING
+════════════════════════════════════════════ -->
+<section class="section" id="priser">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Priser &amp; pakker</span>
+      <h2 class="section__title">Enkel, transparent<br>prising i norske kroner</h2>
+      <p class="section__lead">Velg fleksibelt per dag, eller spar med en ukentlig fast pakke.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <div class="price-card reveal">
+        <div class="price-card__name">Dagsbillett</div>
+        <div class="price-card__price">
+          <div class="price-card__amount">
+            <span class="price-card__currency">kr</span>395
+          </div>
+          <span class="price-card__period">per dag · med hjemmehenting</span>
+        </div>
+        <p class="price-card__desc">Fleksibel enkeltdags-plass uten binding. Bestill når du trenger det.</p>
+        <ul class="price-card__features">
+          <li>Hjemmehenting &amp; levering</li>
+          <li>3–4 timers naturopplevelse</li>
+          <li>Live GPS-sporing</li>
+          <li>Bilder fra turen</li>
+          <li>Pup Cup inkludert</li>
+          <li>Daglig rapportkort</li>
+        </ul>
+        <a href="#pamelding" class="btn btn--forest price-card__btn">Meld interesse</a>
+      </div>
+
+      <div class="price-card price-card--featured reveal">
+        <div class="price-card__badge">Mest populær</div>
+        <div class="price-card__name">Deltidspakke</div>
+        <div class="price-card__price">
+          <div class="price-card__amount">
+            <span class="price-card__currency">kr</span>1&thinsp;399
+          </div>
+          <span class="price-card__period">per uke · 3 faste dager</span>
+        </div>
+        <p class="price-card__desc">3 faste dager i uken. Du velger hvilke dager – vi holder plassen.</p>
+        <ul class="price-card__features">
+          <li>Alt i Dagsbillett</li>
+          <li>Fast plass på valgte dager</li>
+          <li>Prioritert opphenting</li>
+          <li>Månedlig aktivitetsoppsummering</li>
+          <li>Gratis prøvetur ved oppstart</li>
+        </ul>
+        <a href="#pamelding" class="btn btn--primary price-card__btn">Velg Deltidspakke</a>
+      </div>
+
+      <div class="price-card reveal">
+        <div class="price-card__name">Heltidspakke</div>
+        <div class="price-card__price">
+          <div class="price-card__amount">
+            <span class="price-card__currency">kr</span>2&thinsp;199
+          </div>
+          <span class="price-card__period">per uke · alle 5 dager</span>
+        </div>
+        <p class="price-card__desc">Full uke med daglig eventyr – din whippets drømmehverdag, hver dag.</p>
+        <ul class="price-card__features">
+          <li>Alt i Deltidspakke</li>
+          <li>Alle 5 ukesdager inkludert</li>
+          <li>Tidligst opphenting garantert</li>
+          <li>Månedlig 1:1 velferdsmøte</li>
+          <li>Eksklusiv frokoststund i buggy</li>
+          <li>2 gratis erstatningsdager/mnd</li>
+        </ul>
+        <a href="#pamelding" class="btn btn--forest price-card__btn">Velg Heltidspakke</a>
+      </div>
+
+    </div>
+
+    <div class="pricing-note reveal">
+      <strong>🐕 Ekstra hund (samme husstand):</strong> + kr 250/dag &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>🚌 Busstopp-alternativ</strong> (møter oss på avtalt punkt): − kr 75/dag<br>
+      <strong>📅 Fakturering:</strong> Forskuddsvis månedlig &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>❌ Avbestilling:</strong> Gratis inntil 24 timer før avgang
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SAFETY & MATTILSYNET
+════════════════════════════════════════════ -->
+<section class="section section--dark" id="trygghet">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Trygghet &amp; regelverk</span>
+      <h2 class="section__title">Godkjent, forsikret<br>og fullt regulert</h2>
+      <p class="section__lead">Vi overholder alle krav fra Mattilsynet og norsk dyrevernlovgivning – for din trygghets skyld.</p>
+    </div>
+
+    <div class="safety-grid">
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">🏛️</span>
+        <h3 class="safety-card__title">Mattilsynet-godkjent</h3>
+        <p class="safety-card__text">Virksomheten er registrert og godkjent av Mattilsynet i henhold til Dyrevelferdsloven og Forskrift om hold av hund. Alle aktiviteter er i tråd med gjeldende norsk regelverk.</p>
+      </div>
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">⚖️</span>
+        <h3 class="safety-card__title">Dyrevelferdsloven</h3>
+        <p class="safety-card__text">Vi følger Lov om dyrevelferd (2009) med krav til forsvarlig stell, god ernæring, naturlig adferd og veterinærkontakt. Hvert enkelt dyr behandles med respekt og omsorg.</p>
+      </div>
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">🦮</span>
+        <h3 class="safety-card__title">Båndtvang – alltid lovlig</h3>
+        <p class="safety-card__text">Båndtvangsperioden (1. april–20. august) overholdes fullt ut. Under båndtvang benyttes eksklusivt inngjerdete privatareal – sikkert, trygt og i henhold til hundeloven.</p>
+      </div>
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">🚑</span>
+        <h3 class="safety-card__title">Veterinær på beredskap</h3>
+        <p class="safety-card__text">Alle passere er sertifisert i hundeførstehjelp etter Røde Kors-standard. Vi har en fast avtale med veterinærklinikk for umiddelbar respons ved behov.</p>
+      </div>
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">👥</span>
+        <h3 class="safety-card__title">Maks 6 hunder per passer</h3>
+        <p class="safety-card__text">Vi følger Mattilsynets veiledning om forsvarlig gruppestørrelse strengt. Maks 6 whippets per passer på naturrutene, 4 på urban rute (torsdag) – alltid.</p>
+      </div>
+      <div class="safety-card reveal">
+        <span class="safety-card__icon">🔖</span>
+        <h3 class="safety-card__title">Helsekrav ved oppstart</h3>
+        <p class="safety-card__text">Alle hunder må fremvise gyldig vaksinasjonsdokumentasjon (rabies, valpesyke, parvo, kennel­hoste), ID-merking og registrering. Helseattest kreves før første tur.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <a href="https://www.mattilsynet.no/dyr/kjaeledyr/hund" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+        Les mer hos Mattilsynet →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SIGNUP FORM
+════════════════════════════════════════════ -->
+<section class="section" id="pamelding">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__eyebrow">Meld interesse</span>
+      <h2 class="section__title">Sikre plass til<br>din whippet</h2>
+      <p class="section__lead">Vi åpner snart. Meld interesse nå og få prioritert plass samt eksklusiv lanseringsrabatt.</p>
+    </div>
+
+    <div class="form-wrap reveal">
+      <div id="form-container">
+        <form id="signup-form" novalidate>
+          <div class="form-grid">
+
+            <div class="form-field">
+              <label for="navn">Ditt navn *</label>
+              <input type="text" id="navn" name="navn" placeholder="Ola Nordmann" required autocomplete="name">
+            </div>
+
+            <div class="form-field">
+              <label for="epost">E-post *</label>
+              <input type="email" id="epost" name="epost" placeholder="ola@example.no" required autocomplete="email">
+            </div>
+
+            <div class="form-field">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="+47 900 00 000" autocomplete="tel">
+            </div>
+
+            <div class="form-field">
+              <label for="adresse">Bydel / adresse *</label>
+              <input type="text" id="adresse" name="adresse" placeholder="Frogner, Oslo" required>
+            </div>
+
+            <div class="form-field">
+              <label for="hund_navn">Hundens navn</label>
+              <input type="text" id="hund_navn" name="hund_navn" placeholder="Bella">
+            </div>
+
+            <div class="form-field">
+              <label for="hund_alder">Hundens alder</label>
+              <input type="text" id="hund_alder" name="hund_alder" placeholder="2 år">
+            </div>
+
+            <div class="form-field form-field--full">
+              <label>Foretrukne dager</label>
+              <div class="form-days">
+                <input type="checkbox" class="form-day" id="dag-man" name="dager" value="Mandag">
+                <label for="dag-man">Man · Vindern</label>
+
+                <input type="checkbox" class="form-day" id="dag-tir" name="dager" value="Tirsdag">
+                <label for="dag-tir">Tir · Nordstrand</label>
+
+                <input type="checkbox" class="form-day" id="dag-ons" name="dager" value="Onsdag">
+                <label for="dag-ons">Ons · Høvik</label>
+
+                <input type="checkbox" class="form-day" id="dag-tor" name="dager" value="Torsdag">
+                <label for="dag-tor">Tor · Sentrum</label>
+
+                <input type="checkbox" class="form-day" id="dag-fre" name="dager" value="Fredag">
+                <label for="dag-fre">Fre · Lillestrøm</label>
+              </div>
+            </div>
+
+            <div class="form-field form-field--full">
+              <label for="pakke">Interessert pakke</label>
+              <select id="pakke" name="pakke">
+                <option value="">Velg pakke…</option>
+                <option value="Dagsbillett (kr 395/dag)">Dagsbillett – kr 395/dag</option>
+                <option value="Deltidspakke (kr 1399/uke, 3 dager)">Deltidspakke – kr 1 399/uke (3 dager)</option>
+                <option value="Heltidspakke (kr 2199/uke, 5 dager)">Heltidspakke – kr 2 199/uke (5 dager)</option>
+              </select>
+            </div>
+
+            <div class="form-field form-field--full">
+              <label for="melding">Melding (valgfritt)</label>
+              <textarea id="melding" name="melding" placeholder="Fortell gjerne om din whippet, spesielle behov, kosthold eller spørsmål du har…"></textarea>
+            </div>
+
+          </div>
+
+          <div id="form-error" style="display:none; color:#c0392b; font-size:.85rem; margin-bottom:1rem; text-align:center;"></div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn btn--primary" id="submit-btn">
+              Send interesse ✦
+            </button>
+            <p class="form-privacy">Vi deler aldri dine opplysninger med tredjeparter.<br>Kun kontakt i forbindelse med Whippet Luksus.</p>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <span class="form-success__icon">🐕</span>
+        <h3 class="form-success__title">Fantastisk! Vi hører fra oss!</h3>
+        <p class="form-success__text">Takk for din interesse i Whippet Luksus.<br>Vi tar kontakt så snart vi har nyheter om åpningsdato og din prioriterte plass.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">Whippet Luksus</div>
+        <p class="footer__brand-text">Oslos første mobile hundedagplass eksklusivt for whippets. Vi forstår rasen, elsker hundene og kjører til din dør – mandag til fredag, i hele Oslo-regionen.</p>
+      </div>
+      <div>
+        <div class="footer__heading">Navigasjon</div>
+        <ul class="footer__links">
+          <li><a href="#konsept">Konsept</a></li>
+          <li><a href="#rasen">Rasen</a></li>
+          <li><a href="#ruter">Ukesruter</a></li>
+          <li><a href="#priser">Priser</a></li>
+          <li><a href="#trygghet">Trygghet</a></li>
+          <li><a href="#pamelding">Meld interesse</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading">Kontakt</div>
+        <ul class="footer__links">
+          <li><a href="mailto:hei@whippetluksus.no">hei@whippetluksus.no</a></li>
+          <li><a href="tel:+4798765432">+47 987 65 432</a></li>
+          <li>Oslo, Norge</li>
+          <li style="margin-top:.5rem;"><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2025 Whippet Luksus AS. Alle rettigheter forbeholdt.</span>
+      <div class="footer__badge">
+        <span>🏛️</span>
+        <span>Godkjent av Mattilsynet · Org.nr. XXX XXX XXX</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────────
+   SUPABASE CONFIGURATION
+   ─────────────────────────────────────────────
+
+   SETUP INSTRUCTIONS:
+
+   1. Create a project at https://supabase.com
+   2. Go to Settings → API to get your URL and anon key
+   3. Replace the values below
+   4. Run this SQL in Supabase → SQL Editor:
+
+      CREATE TABLE interessenter (
+        id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        navn        TEXT NOT NULL,
+        epost       TEXT NOT NULL,
+        telefon     TEXT,
+        adresse     TEXT,
+        hund_navn   TEXT,
+        hund_alder  TEXT,
+        dager       TEXT[],
+        pakke       TEXT,
+        melding     TEXT,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+      );
+
+      ALTER TABLE interessenter ENABLE ROW LEVEL SECURITY;
+      CREATE POLICY "Allow anon insert"
+        ON interessenter FOR INSERT
+        TO anon WITH CHECK (true);
+
+   5. Deploy to Vercel:
+      - Push this file to a GitHub repo
+      - Import repo in Vercel → Deploy
+      - Add SUPABASE_URL and SUPABASE_ANON_KEY as
+        environment variables (optional — or keep inline)
+
+─────────────────────────────────────────────── */
+
+const SUPABASE_URL      = 'https://nobmpsyqwalpnlsrtgny.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYm1wc3lxd2FscG5sc3J0Z255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODUwMjQsImV4cCI6MjA5MzU2MTAyNH0.qNuTctR_kDhEItvKR53craND1l0BybSRei5olPxXCz8';
+
+let db = null;
+try {
+  const { createClient } = supabase;
+  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch(e) {
+  console.warn('Supabase: konfigurer URL og nøkkel for å aktivere skjema-lagring.', e);
+}
+
+
+/* ── NAV SCROLL ─────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 70);
+}, { passive: true });
+
+
+/* ── MOBILE NAV ─────────────────────────────── */
+document.getElementById('burger').addEventListener('click', () => {
+  document.getElementById('mobile-nav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('mobile-close').addEventListener('click', closeMobile);
+
+function closeMobile() {
+  document.getElementById('mobile-nav').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+
+/* ── ROUTE TABS ─────────────────────────────── */
+document.querySelectorAll('.route-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const t = tab.dataset.target;
+    document.querySelectorAll('.route-tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.route-panel').forEach(x => x.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById('route-' + t);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+
+/* ── SCROLL REVEAL ──────────────────────────── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+/* ── FORM SUBMIT ────────────────────────────── */
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const btn      = document.getElementById('submit-btn');
+  const errBox   = document.getElementById('form-error');
+  errBox.style.display = 'none';
+
+  // Basic validation
+  const navn   = document.getElementById('navn').value.trim();
+  const epost  = document.getElementById('epost').value.trim();
+  const adress = document.getElementById('adresse').value.trim();
+
+  if (!navn || !epost || !adress) {
+    errBox.textContent = 'Vennligst fyll ut alle obligatoriske felt (*).';
+    errBox.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost)) {
+    errBox.textContent = 'Vennligst oppgi en gyldig e-postadresse.';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  btn.textContent = 'Sender…';
+  btn.disabled = true;
+
+  const dager = [...document.querySelectorAll('.form-day:checked')].map(cb => cb.value);
+
+  const payload = {
+    navn,
+    epost,
+    telefon:    document.getElementById('telefon').value.trim()    || null,
+    adresse:    adress,
+    hund_navn:  document.getElementById('hund_navn').value.trim()  || null,
+    hund_alder: document.getElementById('hund_alder').value.trim() || null,
+    dager:      dager.length ? dager : null,
+    pakke:      document.getElementById('pakke').value             || null,
+    melding:    document.getElementById('melding').value.trim()    || null,
+  };
+
+  // Attempt Supabase insert
+  if (db) {
+    const { error } = await db.from('interessenter').insert([payload]);
+    if (error) {
+      console.error('Supabase feil:', error);
+      errBox.textContent = 'Noe gikk galt. Prøv igjen eller skriv til hei@whippetluksus.no';
+      errBox.style.display = 'block';
+      btn.textContent = 'Send interesse ✦';
+      btn.disabled = false;
+      return;
+    }
+  } else {
+    // Demo / dev mode
+    console.log('📋 Demo-modus – skjemadata:', payload);
+    // Simulate slight delay
+    await new Promise(r => setTimeout(r, 600));
+  }
+
+  // Success
+  document.getElementById('form-container').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+});
+
+
+/* ── SMOOTH ANCHOR ──────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
