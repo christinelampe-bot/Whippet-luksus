@@ -12,6 +12,8 @@
     { "src": "/survey.html", "dest": "/survey.html" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/admin.html", "dest": "/admin.html" },
+    { "src": "/shop", "dest": "/shop.html" },
+    { "src": "/shop.html", "dest": "/shop.html" },
     { "src": "/manifest.json", "dest": "/manifest.json" },
     { "src": "/apple-touch-icon.png", "dest": "/apple-touch-icon.png" },
     { "src": "/favicon-32x32.png", "dest": "/favicon-32x32.png" },
