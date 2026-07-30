@@ -82,6 +82,7 @@ Whippet luksus/
 ├── index.html                       — Markedsføringssiden (landing page)
 ├── booking.html                     — Bookingsystem med kalender + samtykkeskjema + Vipps
 ├── admin.html                       — Admin-side: steng/åpne bookingperioder (passord: WhippetLuksus2026)
+├── shop.html                        — Affiliate-butikk (5 merker, ekte produktbilder)
 ├── survey.html                      — Markedsvalideringssurvey (10 spørsmål til potensielle kunder)
 ├── supabase_booking_setup.sql       — SQL for bookinger-tabell (kjørt)
 ├── supabase_stengte_perioder.sql    — SQL for stengte_perioder-tabell (må kjøres i Supabase)
@@ -125,11 +126,14 @@ Whippet luksus/
 
 - [ ] **Vipps aktivering** — sett `VIPPS_ENABLED = true` + legg inn Vipps-businessnummer
 - [ ] **TikTok-konto** — når aktiv: erstatt galleribilder i index.html med egne bilder
-- [ ] **Vercel-URL** — bekrefte at siden er live etter deploy
 - [ ] **Vilkår & betingelser** — referert til i samtykkeskjemaet, bør lages som egen side
 - [ ] **Fakturering** — oppsett for forskuddsvis månedlig fakturering
 - [ ] **Survey-svar** — samle inn svar fra survey.html og analysere (koble til Supabase eller bruk Google Forms)
 - [ ] **Grill-me fortsettelse** — Q4 ("Har du snakket med faktiske whippet-eiere?") venter
+- [ ] **Affiliate-lenker** — bytt placeholder-lenker i shop.html med ekte sporingslenker når affiliate-program er satt opp. Start med Adtraction.com (Hurtta, evt. Non-Stop Dogwear).
+- [ ] **"Om meg"-seksjon** — skriv personlig bakgrunnshistorie i Christines egen stemme og legg til i index.html
+- [ ] **Ekte bilder** — last opp bilder av egen whippet + buggy/bil for å gjøre siden mer autentisk og personlig
+- [ ] **Snakk med ekte whippet-eiere** — viktigste oppgave før mer investering
 
 ---
 
@@ -146,3 +150,4 @@ Whippet luksus/
 | Dato | Hva ble gjort |
 |------|--------------|
 | 2026-07-30 | Opprettet hele prosjektet: index.html (landing page), booking.html (bookingsystem med kalender, samtykkeskjema, Vipps-placeholder), Supabase-tabell (bookinger), prissetting, månedspakke med oppsigelsesvilkår, kapasitet oppdatert til 8/dag, myndefamilien lagt til, galleri oppdatert med sosiale/natur-bilder, oppstartssjekkliste.docx, site-validator skill, CLAUDE.md, survey.html (10-spørsmåls markedsvalideringssurvey) |
+| 2026-07-30 (forts.) | Affiliate-butikk shop.html laget med 5 premiummerker (Sightly Studio, Equafleece, Speedray, Non-Stop Dogwear, Hurtta) + ekte produktbilder hentet fra merkenes egne sider + filtreringstabs. Deltidspakke-pris hevet fra kr 1 990 til kr 2 490/uke (for å skille fra Månedspakke kr 1 990/mnd). Diskutert hvordan gjøre siden mer autentisk/menneskelig: prioritert tiltak er ekte bilder av hund + bil og personlig "Om meg"-tekst i Christines stemme. |
