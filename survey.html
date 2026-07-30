@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hjelp oss forme Whippet Luksus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --mauve:      #E0B0FF;
+      --mauve-deep: #B060E8;
+      --mauve-dark: #2D1B4E;
+      --mauve-mid:  #7B3DB8;
+      --mauve-light:#F0D5FF;
+      --mauve-pale: #FAF2FF;
+      --dark:       #1A0F2E;
+      --text:       #2D1B4E;
+      --muted:      #7A6090;
+      --border:     #E5D0F5;
+      --r:          10px;
+      --r-lg:       20px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Jost', sans-serif; background: var(--mauve-pale); color: var(--text); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(145deg, #1A0F2E 0%, #2D1B4E 40%, #7B3DB8 80%, #B060E8 100%);
+      padding: 60px 5% 50px;
+      text-align: center;
+    }
+    .hero-paw { font-size: 2.5rem; display: block; margin-bottom: 16px; opacity: 0.8; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,5vw,3rem); font-weight: 300; color: #fff; }
+    .hero h1 em { color: var(--mauve); font-style: italic; }
+    .hero p { color: rgba(255,255,255,0.7); margin-top: 12px; font-size: 0.95rem; line-height: 1.6; max-width: 480px; margin-inline: auto; }
+
+    /* FORM WRAP */
+    .wrap { max-width: 680px; margin: 0 auto; padding: 48px 5% 80px; }
+
+    .intro-card {
+      background: #fff;
+      border-radius: var(--r-lg);
+      border: 1.5px solid var(--border);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .intro-card strong { color: var(--mauve-mid); }
+
+    /* QUESTION CARD */
+    .q-card {
+      background: #fff;
+      border-radius: var(--r-lg);
+      border: 1.5px solid var(--border);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+    .q-card:focus-within { border-color: var(--mauve); }
+
+    .q-num {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mauve-deep);
+      margin-bottom: 6px;
+    }
+    .q-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .q-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* RADIO / CHECKBOX OPTIONS */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: var(--r);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.18s;
+      user-select: none;
+    }
+    .opt:hover { border-color: var(--mauve); background: var(--mauve-pale); }
+    .opt input { accent-color: var(--mauve-deep); width: 16px; height: 16px; flex-shrink: 0; }
+    .opt.selected { border-color: var(--mauve-deep); background: linear-gradient(135deg, rgba(224,176,255,0.1), rgba(176,96,232,0.05)); }
+
+    /* SCALE */
+    .scale-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .scale-btn {
+      flex: 1; min-width: 44px;
+      padding: 12px 6px;
+      text-align: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: #fff;
+      color: var(--muted);
+    }
+    .scale-btn:hover { border-color: var(--mauve); color: var(--mauve-mid); }
+    .scale-btn.selected { border-color: var(--mauve-deep); background: var(--mauve-deep); color: #fff; }
+    .scale-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; color: var(--muted); }
+
+    /* TEXT INPUT */
+    textarea, input[type="text"], input[type="email"] {
+      width: 100%; font-family: 'Jost', sans-serif; font-size: 0.92rem;
+      color: var(--text); background: var(--mauve-pale);
+      border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 12px 14px; outline: none; resize: vertical;
+      transition: border-color 0.2s;
+    }
+    textarea { min-height: 90px; }
+    textarea:focus, input[type="text"]:focus, input[type="email"]:focus {
+      border-color: var(--mauve-deep);
+      box-shadow: 0 0 0 3px rgba(176,96,232,0.1);
+    }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
+    .field-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; display: block; }
+
+    /* SUBMIT */
+    .submit-wrap { text-align: center; margin-top: 36px; }
+    .btn-submit {
+      background: linear-gradient(135deg, var(--mauve-mid), var(--mauve-deep));
+      color: #fff; border: none; border-radius: 50px;
+      padding: 16px 48px; font-family: 'Jost', sans-serif;
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* SUCCESS */
+    .success { display: none; text-align: center; padding: 60px 20px; }
+    .success-icon { font-size: 3rem; margin-bottom: 16px; }
+    .success h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: var(--mauve-dark); margin-bottom: 12px; }
+    .success p { color: var(--muted); line-height: 1.7; }
+
+    /* PROGRESS */
+    .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 32px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--mauve-mid), var(--mauve-deep)); border-radius: 2px; transition: width 0.4s; }
+
+    footer { text-align: center; padding: 32px; background: var(--dark); color: rgba(255,255,255,0.35); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <span class="hero-paw">🐾</span>
+  <h1>Hjelp oss forme<br><em>Whippet Luksus</em></h1>
+  <p>10 korte spørsmål som hjelper oss å lage en tjeneste du faktisk vil elske. Tar under 3 minutter.</p>
+</section>
+
+<div class="wrap">
+
+  <div class="intro-card">
+    Vi er i ferd med å lansere Oslos første mobile hundedagplass <strong>eksklusivt for whippets og myndefamilien</strong>.
+    Klimastyrt buggy henter hunden hjemme, tar dem på naturopplevelser, og bringer dem hjem — slitne og glade.
+    <br><br>
+    Din tilbakemelding former alt fra priser til ruter. <strong>Ingen riktige svar — bare din ærlige mening.</strong>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+  <form id="surveyForm">
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 1 av 10</div>
+      <div class="q-label">Hvilken rase har du?</div>
+      <div class="q-sub">Velg det som passer best.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q1" value="whippet" /> Whippet</label>
+        <label class="opt"><input type="radio" name="q1" value="greyhound" /> Greyhound</label>
+        <label class="opt"><input type="radio" name="q1" value="italiensk_mynde" /> Italiensk mynde</label>
+        <label class="opt"><input type="radio" name="q1" value="galgo" /> Galgo español</label>
+        <label class="opt"><input type="radio" name="q1" value="annen_mynde" /> Annen mynde/sighthound</label>
+        <label class="opt"><input type="radio" name="q1" value="annen" /> Annen rase (nysgjerrig tilskuer!)</label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 2 av 10</div>
+      <div class="q-label">Hva gjør du med hunden på hverdager mens du jobber?</div>
+      <div class="q-sub">Velg det som beskriver situasjonen din best.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q2" value="hjemme_alene" /> Hunden er hjemme alene</label>
+        <label class="opt"><input type="radio" name="q2" value="hundepasser" /> Jeg bruker hundepasser/luftetjeneste</label>
+        <label class="opt"><input type="radio" name="q2" value="dagplass" /> Hunden er på hundedagplass</label>
+        <label class="opt"><input type="radio" name="q2" value="hjemmekontor" /> Jeg jobber hjemmefra / tar med hunden</label>
+        <label class="opt"><input type="radio" name="q2" value="annet" /> Annet</label>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 3 av 10</div>
+      <div class="q-label">Hvor fornøyd er du med dagens løsning?</div>
+      <div class="q-sub">1 = veldig misfornøyd, 5 = veldig fornøyd</div>
+      <div class="scale-wrap" id="scale-q3"></div>
+      <div class="scale-labels"><span>Misfornøyd</span><span>Fornøyd</span></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 4 av 10</div>
+      <div class="q-label">Hvor interessant synes du dette konseptet er?</div>
+      <div class="q-sub">Mobil luksus-dagplass med hjemmehenting, naturopplevelser og rasespesialiserte passere — kun for myndefamilien. 1 = ikke interessant, 5 = veldig interessant.</div>
+      <div class="scale-wrap" id="scale-q4"></div>
+      <div class="scale-labels"><span>Ikke interessant</span><span>Veldig interessant</span></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 5 av 10</div>
+      <div class="q-label">Hva er det maksimale du ville betalt per dag for denne tjenesten?</div>
+      <div class="q-sub">Inkludert hjemmehenting og levering.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q5" value="under_200" /> Under kr 200</label>
+        <label class="opt"><input type="radio" name="q5" value="200_300" /> kr 200–300</label>
+        <label class="opt"><input type="radio" name="q5" value="300_400" /> kr 300–400</label>
+        <label class="opt"><input type="radio" name="q5" value="400_500" /> kr 400–500</label>
+        <label class="opt"><input type="radio" name="q5" value="over_500" /> Over kr 500 — for riktig kvalitet</label>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 6 av 10</div>
+      <div class="q-label">Til kr 395 per dag — ville du booket en plass i løpet av de neste to ukene?</div>
+      <div class="q-sub">Vær ærlig. Dette er det viktigste spørsmålet.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q6" value="ja" /> Ja, uten å nøle</label>
+        <label class="opt"><input type="radio" name="q6" value="sannsynlig" /> Sannsynligvis ja</label>
+        <label class="opt"><input type="radio" name="q6" value="kanskje" /> Kanskje — trenger mer informasjon</label>
+        <label class="opt"><input type="radio" name="q6" value="nei" /> Nei, prisen er for høy</label>
+        <label class="opt"><input type="radio" name="q6" value="nei_annet" /> Nei, av andre grunner</label>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 7 av 10</div>
+      <div class="q-label">Hva foretrekker du?</div>
+      <div class="q-sub">Tenk på hva som passer din hverdag best.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q7" value="enkeltdag" /> Betale per dag (kr 395) — full fleksibilitet</label>
+        <label class="opt"><input type="radio" name="q7" value="manedlig" /> Månedspakke (kr 1 000/mnd for opptil 5 dager)</label>
+        <label class="opt"><input type="radio" name="q7" value="ukentlig" /> Fast ukentlig abonnement (3–5 dager per uke)</label>
+        <label class="opt"><input type="radio" name="q7" value="vet_ikke" /> Vet ikke enda</label>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 8 av 10</div>
+      <div class="q-label">Hvilken dag og rute passer best for deg?</div>
+      <div class="q-sub">Velg gjerne flere.</div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="q8" value="man_vindern" /> Mandag — Vindern &amp; Holmenkollen</label>
+        <label class="opt"><input type="checkbox" name="q8" value="tir_nordstrand" /> Tirsdag — Nordstrand</label>
+        <label class="opt"><input type="checkbox" name="q8" value="ons_hovik" /> Onsdag — Høvik &amp; Jar</label>
+        <label class="opt"><input type="checkbox" name="q8" value="tor_sentrum" /> Torsdag — Oslo Sentrum</label>
+        <label class="opt"><input type="checkbox" name="q8" value="fre_lillestrom" /> Fredag — Lillestrøm &amp; Rælingen</label>
+        <label class="opt"><input type="checkbox" name="q8" value="ingen" /> Ingen av disse passer</label>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 9 av 10</div>
+      <div class="q-label">Hva er den største bekymringen din for en slik tjeneste?</div>
+      <div class="q-sub">Ingen svar er for kritisk — dette er akkurat det vi trenger å vite.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q9" value="trygghet" /> Trygghet — hva skjer hvis noe går galt?</label>
+        <label class="opt"><input type="radio" name="q9" value="pris" /> Pris — det er for dyrt</label>
+        <label class="opt"><input type="radio" name="q9" value="rase" /> Raseblanding — vil ikke at hunden min er med andre raser</label>
+        <label class="opt"><input type="radio" name="q9" value="kapasitet" /> Tilgjengelighet — hva om det alltid er fullt?</label>
+        <label class="opt"><input type="radio" name="q9" value="tillit" /> Tillit — jeg kjenner ikke dere enda</label>
+        <label class="opt"><input type="radio" name="q9" value="ingen" /> Ingen spesiell bekymring</label>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card">
+      <div class="q-num">Spørsmål 10 av 10</div>
+      <div class="q-label">Er det noe vi ikke har spurt om som er viktig for deg?</div>
+      <div class="q-sub">Fritekst — skriv gjerne det første du tenker på.</div>
+      <textarea name="q10" placeholder="F.eks. ønsker om ekstra tjenester, bekymringer, eller bare en god idé…"></textarea>
+    </div>
+
+    <!-- KONTAKT -->
+    <div class="q-card">
+      <div class="q-num">Valgfritt</div>
+      <div class="q-label">Vil du ha prioritert plass ved lansering?</div>
+      <div class="q-sub">Legg igjen kontaktinfo, så kontakter vi deg personlig før vi åpner for alle.</div>
+      <div class="contact-grid">
+        <div>
+          <label class="field-label" for="kontakt_navn">Navn</label>
+          <input type="text" id="kontakt_navn" name="kontakt_navn" placeholder="Ditt navn" />
+        </div>
+        <div>
+          <label class="field-label" for="kontakt_epost">E-post</label>
+          <input type="email" id="kontakt_epost" name="kontakt_epost" placeholder="din@epost.no" />
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="submit" class="btn-submit">Send svar 🐾</button>
+    </div>
+
+  </form>
+
+  <div class="success" id="successMsg">
+    <div class="success-icon">🐾</div>
+    <h2>Tusen takk!</h2>
+    <p>Svarene dine betyr masse for oss.<br>Vi tar med oss tilbakemeldingene dine inn i lanseringsplanleggingen.</p>
+    <br>
+    <p style="color:var(--mauve-mid);font-weight:500">Følg med på <a href="index.html" style="color:var(--mauve-deep)">whippetluksus.no</a> for nyheter om åpning!</p>
+  </div>
+
+</div>
+
+<footer>© 2025 Whippet Luksus · Oslo</footer>
+
+<script>
+// Build scale buttons
+function buildScale(id, name) {
+  const wrap = document.getElementById(id);
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'scale-btn';
+    btn.textContent = i;
+    btn.dataset.name = name;
+    btn.dataset.value = i;
+    btn.onclick = function() {
+      wrap.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+    };
+    wrap.appendChild(btn);
+  }
+}
+buildScale('scale-q3', 'q3');
+buildScale('scale-q4', 'q4');
+
+// Highlight selected options
+document.querySelectorAll('.opt input').forEach(inp => {
+  inp.addEventListener('change', () => {
+    if (inp.type === 'radio') {
+      document.querySelectorAll(`.opt input[name="${inp.name}"]`).forEach(i => {
+        i.closest('.opt').classList.remove('selected');
+      });
+    }
+    inp.closest('.opt').classList.toggle('selected', inp.checked);
+  });
+});
+
+// Progress bar
+function updateProgress() {
+  const total = 10;
+  let answered = 0;
+  for (let i = 1; i <= 8; i++) {
+    const el = document.querySelector(`[name="q${i}"]:checked`) ||
+               document.querySelector(`#scale-q${i} .selected`);
+    if (el) answered++;
+  }
+  if (document.querySelector('[name="q9"]:checked')) answered++;
+  if (document.querySelector('[name="q10"]').value.trim()) answered++;
+  document.getElementById('progress').style.width = (answered / total * 100) + '%';
+}
+document.addEventListener('change', updateProgress);
+document.querySelector('[name="q10"]').addEventListener('input', updateProgress);
+
+// Submit
+document.getElementById('surveyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  // Collect answers
+  const data = {};
+  new FormData(e.target).forEach((v, k) => {
+    if (data[k]) { data[k] = [].concat(data[k], v); }
+    else { data[k] = v; }
+  });
+  // Scale values
+  ['q3','q4'].forEach(q => {
+    const sel = document.querySelector(`#scale-${q} .selected`);
+    if (sel) data[q] = sel.dataset.value;
+  });
+  console.log('Survey data:', data);
+  // Show success
+  document.getElementById('surveyForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

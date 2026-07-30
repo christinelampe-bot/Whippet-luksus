@@ -79,6 +79,7 @@ Oslos første mobile hundedagplass for whippets og myndefamilien. Inspirert av [
 Whippet luksus/
 ├── index.html                  — Markedsføringssiden (landing page)
 ├── booking.html                — Bookingsystem med kalender + samtykkeskjema + Vipps
+├── survey.html                 — Markedsvalideringssurvey (10 spørsmål til potensielle kunder)
 ├── supabase_booking_setup.sql  — SQL som er kjørt i Supabase (tabellstruktur)
 ├── vercel.json                 — Vercel routing (serverer begge .html-filer)
 ├── CLAUDE.md                   — Denne filen
@@ -119,6 +120,8 @@ Whippet luksus/
 - [ ] **Vercel-URL** — bekrefte at siden er live etter deploy
 - [ ] **Vilkår & betingelser** — referert til i samtykkeskjemaet, bør lages som egen side
 - [ ] **Fakturering** — oppsett for forskuddsvis månedlig fakturering
+- [ ] **Survey-svar** — samle inn svar fra survey.html og analysere (koble til Supabase eller bruk Google Forms)
+- [ ] **Grill-me fortsettelse** — Q4 ("Har du snakket med faktiske whippet-eiere?") venter
 
 ---
 
@@ -134,4 +137,4 @@ Whippet luksus/
 
 | Dato | Hva ble gjort |
 |------|--------------|
-| 2026-07-30 | Opprettet hele prosjektet: index.html (landing page), booking.html (bookingsystem med kalender, samtykkeskjema, Vipps-placeholder), Supabase-tabell (bookinger), prissetting, månedspakke med oppsigelsesvilkår, kapasitet oppdatert til 8/dag, myndefamilien lagt til, galleri oppdatert med sosiale/natur-bilder |
+| 2026-07-30 | Opprettet hele prosjektet: index.html (landing page), booking.html (bookingsystem med kalender, samtykkeskjema, Vipps-placeholder), Supabase-tabell (bookinger), prissetting, månedspakke med oppsigelsesvilkår, kapasitet oppdatert til 8/dag, myndefamilien lagt til, galleri oppdatert med sosiale/natur-bilder, oppstartssjekkliste.docx, site-validator skill, CLAUDE.md, survey.html (10-spørsmåls markedsvalideringssurvey) |
