@@ -40,11 +40,10 @@ Oslos første mobile hundedagplass for whippets og myndefamilien. Inspirert av [
 
 | Produkt | Pris | Detaljer |
 |---------|------|----------|
-| Enkeltdag | kr 395 | Per dag, ingen binding |
-| 5-dagerspakke | kr 1 399 | Engangskjøp, 29% spart vs enkeltdag |
-| **Månedspakke** | **kr 1 000/mnd** | Opptil 5 dager/mnd, spredt eller sammenhengende, **49% spart** — ANBEFALT for vekst |
-| Deltidspakke | kr 1 399/uke | 3 faste dager per uke |
-| Heltidspakke | kr 2 199/uke | Alle 5 dager |
+| Enkeltdag | kr 550 | Per dag, ingen binding |
+| **Månedspakke** | **kr 1 990/mnd** | Opptil 5 dager/mnd, spredt eller sammenhengende, 28% spart |
+| Deltidspakke | kr 1 990/uke | 3 faste dager per uke — garantert fast plass |
+| Heltidspakke | kr 2 990/uke | Alle 5 dager — maks inntekt per hund |
 
 **Månedspakke-vilkår:** 1 måneds oppsigelse, gjeldende fra utgangen av en kalendermåned.  
 **Tillegg:** +kr 250/dag for ekstra hund (samme husstand) · −kr 75/dag ved busstopp-møte

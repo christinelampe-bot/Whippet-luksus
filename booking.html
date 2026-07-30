@@ -1015,23 +1015,23 @@
         <div class="price-label">Enkeltdag</div>
         <div class="price-desc">Én dag uten binding — perfekt for å prøve</div>
       </div>
-      <div class="price-amount">kr 395</div>
+      <div class="price-amount">kr 550</div>
     </div>
     <div class="price-card" id="cardAbo" onclick="selectType('abonnement')">
       <div class="price-radio" id="radioAbo"></div>
       <div class="price-info">
-        <div class="price-label">5-dagerspakke</div>
-        <div class="price-desc">Forhåndsbetal 5 dager — bruk når du vil (29% spart)</div>
+        <div class="price-label">Heltidspakke</div>
+        <div class="price-desc">Alle 5 dager hver uke — garantert fast plass</div>
       </div>
-      <div class="price-amount">kr 1 399</div>
+      <div class="price-amount">kr 2 990<span style="font-family:'Jost',sans-serif;font-size:0.7rem;color:var(--text-muted);font-weight:400">/uke</span></div>
     </div>
     <div class="price-card" id="cardMnd" onclick="selectType('manedlig')">
       <div class="price-radio" id="radioMnd"></div>
       <div class="price-info">
         <div class="price-label">Månedspakke</div>
-        <div class="price-desc">Opptil 5 dager/mnd — spredt eller sammenhengende (49% spart)</div>
+        <div class="price-desc">Opptil 5 dager/mnd — spredt eller sammenhengende (28% spart)</div>
       </div>
-      <div class="price-amount">kr 1 000<span style="font-family:'Jost',sans-serif;font-size:0.7rem;color:var(--text-muted);font-weight:400">/mnd</span></div>
+      <div class="price-amount">kr 1 990<span style="font-family:'Jost',sans-serif;font-size:0.7rem;color:var(--text-muted);font-weight:400">/mnd</span></div>
     </div>
   </div>
 
@@ -1066,12 +1066,12 @@
         </div>
 
         <div class="abo-info" id="aboInfo">
-          🐾 <strong>5-dagerspakke — kr 1 399 (29% spart)</strong><br/>
-          Du bestiller nå første dag og vi kontakter deg på e-post for å sette opp de resterende 4 dagene. Betaling skjer ved første oppmøte.
+          🐾 <strong>Heltidspakke — kr 2 990/uke</strong><br/>
+          Garantert fast plass alle 5 dager hver uke. Du bestiller nå og vi kontakter deg for å sette opp faste ukesdager. Betaling skjer ved oppstart.
         </div>
 
         <div class="abo-info" id="mndInfo">
-          📅 <strong>Månedspakke — kr 1 000/mnd (49% spart)</strong><br/>
+          📅 <strong>Månedspakke — kr 1 990/mnd (28% spart)</strong><br/>
           Opptil 5 dager per kalendermåned. Datoene kan spres fritt eller sammenhengende. Vi kontakter deg for å bekrefte datoer. Fornyes automatisk månedlig — <strong>oppsigelse med 1 måneds varsel, gjeldende fra utgangen av en kalendermåned.</strong>
         </div>
 
@@ -1204,7 +1204,7 @@
 
         <div class="submit-row">
           <div class="total-price" id="totalPrice">
-            kr 395 <span>enkeltdag</span>
+            kr 550 <span>enkeltdag</span>
           </div>
           <button type="submit" class="btn-book" id="submitBtn">
             <span class="btn-text">Bekreft booking</span>
@@ -1240,7 +1240,7 @@
     </div>
     <h3>Betal med Vipps</h3>
     <p id="vippsDesc">Rask og enkel betaling direkte fra mobilen din.</p>
-    <div class="vipps-amount" id="vippsAmount">kr 395</div>
+    <div class="vipps-amount" id="vippsAmount">kr 550</div>
     <div id="vippsActive" style="display:none">
       <button class="btn-vipps" id="vippsBtn" onclick="payWithVipps()">
         Åpne Vipps ›
@@ -1481,9 +1481,9 @@ function selectType(type) {
 
 function updatePriceDisplay() {
   const prices = {
-    enkeltdag:  'kr 395 <span>enkeltdag</span>',
-    abonnement: 'kr 1 399 <span>5-dagerspakke</span>',
-    manedlig:   'kr 1 000 <span>månedspakke/mnd</span>',
+    enkeltdag:  'kr 550 <span>enkeltdag</span>',
+    abonnement: 'kr 2 990 <span>heltidspakke/uke</span>',
+    manedlig:   'kr 1 990 <span>månedspakke/mnd</span>',
   };
   document.getElementById('totalPrice').innerHTML = prices[bookingType] || prices.enkeltdag;
 }
@@ -1588,13 +1588,13 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
   const typeLabels = {
     enkeltdag:  'Enkeltdag',
-    abonnement: '5-dagerspakke',
+    abonnement: 'Heltidspakke',
     manedlig:   'Månedspakke',
   };
   const priceLabels = {
-    enkeltdag:  'kr 395',
-    abonnement: 'kr 1 399',
-    manedlig:   'kr 1 000/mnd',
+    enkeltdag:  'kr 550',
+    abonnement: 'kr 2 990/uke',
+    manedlig:   'kr 1 990/mnd',
   };
 
   document.getElementById('successDetails').innerHTML = `
@@ -1608,7 +1608,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
   if (bookingType === 'abonnement') {
     document.getElementById('successText').textContent =
-      'Vi gleder oss! Vi kontakter deg snart på e-post for å bekrefte de resterende 4 dagene i 5-dagerspakken din.';
+      'Vi gleder oss! Vi kontakter deg snart på e-post for å sette opp faste ukesdager for heltidspakken din.';
   } else if (bookingType === 'manedlig') {
     document.getElementById('successText').textContent =
       'Velkommen som månedlig abonnent! Vi kontakter deg på e-post for å planlegge alle dagene dine denne måneden.';
@@ -1672,7 +1672,7 @@ function showVippsPanel(type) {
     document.getElementById('vippsDesc').textContent =
       'Første månedsbetaling. Fornyes automatisk månedlig — avslutt med 1 måneds varsel fra månedens utgang.';
   } else if (type === 'abonnement') {
-    document.getElementById('vippsDesc').textContent = 'Forhåndsbetaling for 5-dagerspakken din.';
+    document.getElementById('vippsDesc').textContent = 'Forhåndsbetaling for heltidspakken din.';
   } else {
     document.getElementById('vippsDesc').textContent = 'Betaling for enkeltdagen.';
   }
