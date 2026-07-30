@@ -18,24 +18,32 @@
        DESIGN TOKENS
     ───────────────────────────────────────────── */
     :root {
+      --mauve:        #E0B0FF;
+      --mauve-deep:   #B060E8;
+      --mauve-dark:   #2D1B4E;
+      --mauve-mid:    #7B3DB8;
+      --mauve-light:  #F0D5FF;
+      --mauve-pale:   #FAF2FF;
+      --mauve-bg:     #F5EAFF;
       --gold:         #C49A3C;
       --gold-light:   #E8C46A;
-      --gold-pale:    #FAF5E8;
+      --gold-pale:    #FDF8EE;
       --gold-bg:      #F5EDD3;
-      --forest:       #1A3828;
-      --forest-mid:   #2D5C40;
-      --forest-light: #4A7A5A;
-      --cream:        #F7F3EA;
+      /* legacy aliases so existing rules still resolve */
+      --forest:       #2D1B4E;
+      --forest-mid:   #7B3DB8;
+      --forest-light: #B060E8;
+      --cream:        #FAF7FF;
       --white:        #FFFFFF;
-      --dark:         #161818;
-      --text:         #363636;
-      --text-muted:   #707070;
-      --border:       #E4D9C0;
-      --shadow-sm:    0 2px 12px rgba(26,56,40,.08);
-      --shadow-md:    0 8px 40px rgba(26,56,40,.14);
-      --shadow-lg:    0 20px 80px rgba(26,56,40,.2);
-      --r:            4px;
-      --r-lg:         14px;
+      --dark:         #1A0F2E;
+      --text:         #2D1B4E;
+      --text-muted:   #7A6090;
+      --border:       #E5D0F5;
+      --shadow-sm:    0 2px 16px rgba(45,27,78,.09);
+      --shadow-md:    0 8px 40px rgba(45,27,78,.15);
+      --shadow-lg:    0 24px 80px rgba(45,27,78,.22);
+      --r:            10px;
+      --r-lg:         22px;
     }
 
     /* ─────────────────────────────────────────────
@@ -134,7 +142,7 @@
     .nav__mobile {
       display:none;
       position:fixed; top:0; left:0; right:0; bottom:0; z-index:190;
-      background:var(--forest);
+      background:var(--mauve-dark);
       flex-direction:column; align-items:center; justify-content:center;
       gap:2rem;
     }
@@ -156,7 +164,7 @@
     ───────────────────────────────────────────── */
     .hero {
       min-height:100vh;
-      background:linear-gradient(150deg, var(--forest) 0%, var(--forest-mid) 55%, #3D6E50 100%);
+      background:linear-gradient(145deg, #1A0F2E 0%, #2D1B4E 35%, #7B3DB8 70%, #B060E8 100%);
       display:flex; align-items:center; justify-content:center;
       position:relative; overflow:hidden;
       padding:8rem 0 7rem;
@@ -166,16 +174,27 @@
       position:absolute; top:-8%; right:-4%;
       width:65vw; height:65vw; max-width:900px; max-height:900px;
       border-radius:50%;
-      background:radial-gradient(circle, rgba(196,154,60,.18) 0%, transparent 68%);
+      background:radial-gradient(circle, rgba(196,154,60,.2) 0%, transparent 68%);
       pointer-events:none;
     }
     .hero__orb2 {
       position:absolute; bottom:-18%; left:-8%;
       width:55vw; height:55vw; max-width:700px; max-height:700px;
       border-radius:50%;
-      background:radial-gradient(circle, rgba(196,154,60,.1) 0%, transparent 65%);
+      background:radial-gradient(circle, rgba(237,213,229,.18) 0%, transparent 65%);
       pointer-events:none;
     }
+    /* Floating paw prints in hero */
+    .hero__paw {
+      position:absolute;
+      opacity:.07;
+      pointer-events:none;
+      fill:white;
+    }
+    .hero__paw--1 { top:12%; left:6%;  width:80px; transform:rotate(-20deg); }
+    .hero__paw--2 { top:30%; right:8%; width:50px; transform:rotate(15deg); }
+    .hero__paw--3 { bottom:20%; left:12%; width:40px; transform:rotate(10deg); }
+    .hero__paw--4 { bottom:35%; right:5%; width:65px; transform:rotate(-30deg); }
     .hero__content {
       text-align:center;
       position:relative; z-index:1;
@@ -251,12 +270,12 @@
       transition:all .25s;
     }
     .btn--primary {
-      background:var(--gold); color:var(--dark);
+      background:var(--mauve-deep); color:#fff;
     }
     .btn--primary:hover {
-      background:var(--gold-light);
+      background:var(--mauve-mid);
       transform:translateY(-2px);
-      box-shadow:0 8px 32px rgba(196,154,60,.4);
+      box-shadow:0 8px 32px rgba(139,90,114,.45);
     }
     .btn--outline {
       background:transparent;
@@ -296,10 +315,10 @@
       display:block;
       font-size:.72rem; font-weight:500;
       letter-spacing:.22em; text-transform:uppercase;
-      color:var(--gold);
+      color:var(--mauve-deep);
       margin-bottom:.875rem;
     }
-    .section--dark .section__eyebrow { color:var(--gold-light); }
+    .section--dark .section__eyebrow { color:var(--mauve-light); }
     .section__title {
       font-size:clamp(2rem, 5vw, 3.6rem);
       color:var(--forest);
@@ -432,9 +451,9 @@
     }
     .route-tab:hover { border-color:var(--forest); color:var(--forest); }
     .route-tab.active {
-      background:var(--forest);
-      border-color:var(--forest);
-      color:var(--gold);
+      background:var(--mauve-deep);
+      border-color:var(--mauve-deep);
+      color:var(--mauve-light);
     }
     .route-panel {
       display:none;
@@ -456,8 +475,9 @@
       font-size:.88rem; color:var(--text);
     }
     .route-highlights li::before {
-      content:'✦';
-      color:var(--gold); font-size:.65rem; margin-top:.35rem; flex-shrink:0;
+      content:'🐾';
+      font-size:.7rem; margin-top:.25rem; flex-shrink:0;
+      filter:saturate(0) brightness(0.6);
     }
     .route-map {
       border-radius:var(--r-lg); overflow:hidden;
@@ -536,8 +556,8 @@
     }
     .price-card:hover { transform:translateY(-7px); box-shadow:var(--shadow-md); }
     .price-card--featured {
-      background:var(--forest);
-      border-color:var(--forest);
+      background:linear-gradient(145deg, var(--mauve-dark), var(--mauve-mid));
+      border-color:var(--mauve-mid);
     }
     .price-card__badge {
       position:absolute; top:-13px; left:50%;
@@ -713,7 +733,7 @@
     }
     .footer__brand-name {
       font-family:'Cormorant Garamond', serif;
-      font-size:1.6rem; color:var(--gold);
+      font-size:1.6rem; color:var(--mauve-light);
       margin-bottom:.875rem;
     }
     .footer__brand-text { font-size:.86rem; line-height:1.8; max-width:300px; }
@@ -806,7 +826,7 @@
     .gallery-item::after {
       content:attr(data-caption);
       position:absolute; inset:0;
-      background:linear-gradient(to top, rgba(26,56,40,.75) 0%, transparent 55%);
+      background:linear-gradient(to top, rgba(62,32,56,.78) 0%, transparent 55%);
       display:flex; align-items:flex-end;
       padding:1.25rem 1.25rem;
       font-family:'Cormorant Garamond', serif;
@@ -893,7 +913,8 @@
   <a href="#ruter"      onclick="closeMobile()">Ruter</a>
   <a href="#priser"     onclick="closeMobile()">Priser</a>
   <a href="#trygghet"   onclick="closeMobile()">Trygghet</a>
-  <a href="#pamelding"  onclick="closeMobile()" style="color:var(--gold)">Meld interesse</a>
+  <a href="#pamelding"  onclick="closeMobile()">Meld interesse</a>
+  <a href="booking.html" style="color:var(--mauve)">Book nå</a>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -903,13 +924,16 @@
   <div class="container">
     <div class="nav__inner">
       <a href="#" class="nav__logo">
-        <!-- Monogram mark -->
+        <!-- Paw print mark -->
         <svg class="nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="19" cy="19" r="19" fill="#1A3828"/>
-          <path d="M10 27 Q11 18 15 13.5 Q17.5 10.5 20 12 Q22.5 10.5 25 13.5 Q29 18 30 27"
-                stroke="#C49A3C" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-          <path d="M13 27 Q15 22 19 22 Q23 22 25 27"
-                stroke="#C49A3C" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".6"/>
+          <circle cx="19" cy="19" r="19" fill="#3E2038"/>
+          <!-- Main pad -->
+          <ellipse cx="19" cy="23" rx="6.5" ry="5.5" fill="#C4A0B5"/>
+          <!-- Toe pads -->
+          <ellipse cx="12.5" cy="17.5" rx="2.8" ry="2.2" fill="#C4A0B5"/>
+          <ellipse cx="16.5" cy="15"   rx="2.8" ry="2.2" fill="#C4A0B5"/>
+          <ellipse cx="21.5" cy="15"   rx="2.8" ry="2.2" fill="#C4A0B5"/>
+          <ellipse cx="25.5" cy="17.5" rx="2.8" ry="2.2" fill="#C4A0B5"/>
         </svg>
         <span class="nav__logo-text">Whippet Luksus</span>
       </a>
@@ -919,7 +943,7 @@
         <li><a href="#ruter">Ruter</a></li>
         <li><a href="#priser">Priser</a></li>
         <li><a href="#trygghet">Trygghet</a></li>
-        <li><a href="#pamelding" class="nav__cta">Meld interesse</a></li>
+        <li><a href="booking.html" class="nav__cta" style="background:linear-gradient(135deg,var(--mauve-mid),var(--mauve-deep)) !important;color:#fff !important">Book nå</a></li>
       </ul>
 
       <button class="nav__burger" id="burger" aria-label="Åpne meny">
@@ -935,6 +959,11 @@
 <section class="hero" id="top">
   <div class="hero__orb1"></div>
   <div class="hero__orb2"></div>
+  <!-- Floating decorative paw prints -->
+  <svg class="hero__paw hero__paw--1" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="65" rx="22" ry="18"/><ellipse cx="22" cy="40" rx="10" ry="8"/><ellipse cx="38" cy="30" rx="10" ry="8"/><ellipse cx="62" cy="30" rx="10" ry="8"/><ellipse cx="78" cy="40" rx="10" ry="8"/></svg>
+  <svg class="hero__paw hero__paw--2" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="65" rx="22" ry="18"/><ellipse cx="22" cy="40" rx="10" ry="8"/><ellipse cx="38" cy="30" rx="10" ry="8"/><ellipse cx="62" cy="30" rx="10" ry="8"/><ellipse cx="78" cy="40" rx="10" ry="8"/></svg>
+  <svg class="hero__paw hero__paw--3" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="65" rx="22" ry="18"/><ellipse cx="22" cy="40" rx="10" ry="8"/><ellipse cx="38" cy="30" rx="10" ry="8"/><ellipse cx="62" cy="30" rx="10" ry="8"/><ellipse cx="78" cy="40" rx="10" ry="8"/></svg>
+  <svg class="hero__paw hero__paw--4" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="65" rx="22" ry="18"/><ellipse cx="22" cy="40" rx="10" ry="8"/><ellipse cx="38" cy="30" rx="10" ry="8"/><ellipse cx="62" cy="30" rx="10" ry="8"/><ellipse cx="78" cy="40" rx="10" ry="8"/></svg>
   <div class="container">
     <div class="hero__content">
       <div class="hero__eyebrow">Oslo · Eksklusivt for Whippets</div>
@@ -968,7 +997,7 @@
       <p class="hero__tagline">Mobil hundedagplass med hjemmehenting – skreddersydd for Oslos mest elegante firbente.</p>
 
       <div class="hero__actions">
-        <a href="#pamelding" class="btn btn--primary">Meld interesse ✦</a>
+        <a href="booking.html" class="btn btn--primary">Book plass ✦</a>
         <a href="#konsept" class="btn btn--outline">Se konseptet</a>
       </div>
     </div>
@@ -1388,7 +1417,7 @@
     <div class="section__header reveal">
       <span class="section__eyebrow">Priser &amp; pakker</span>
       <h2 class="section__title">Enkel, transparent<br>prising i norske kroner</h2>
-      <p class="section__lead">Velg fleksibelt per dag, eller spar med en ukentlig fast pakke.</p>
+      <p class="section__lead">Velg fleksibelt per dag, en 5-dagerspakke, månedlig abonnement eller full ukespakke.</p>
     </div>
 
     <div class="pricing-grid">
@@ -1410,7 +1439,27 @@
           <li>Pup Cup inkludert</li>
           <li>Daglig rapportkort</li>
         </ul>
-        <a href="#pamelding" class="btn btn--forest price-card__btn">Meld interesse</a>
+        <a href="booking.html" class="btn btn--forest price-card__btn">Book nå</a>
+      </div>
+
+      <div class="price-card price-card--featured reveal">
+        <div class="price-card__badge">Beste verdi</div>
+        <div class="price-card__name">Månedspakke</div>
+        <div class="price-card__price">
+          <div class="price-card__amount">
+            <span class="price-card__currency">kr</span>1&thinsp;000
+          </div>
+          <span class="price-card__period">per mnd · opptil 5 dager · 49% spart</span>
+        </div>
+        <p class="price-card__desc">Opptil 5 dagplasser per kalendermåned. Spredt eller sammenhengende — du bestemmer. Avslutt når du vil.</p>
+        <ul class="price-card__features">
+          <li>Alt i Dagsbillett</li>
+          <li>Fleksibel datovelging</li>
+          <li>Spredt eller sammenhengende</li>
+          <li>Prioritert plass ved booking</li>
+          <li>Automatisk månedlig fornying</li>
+        </ul>
+        <a href="booking.html" class="btn btn--primary price-card__btn">Start månedspakke</a>
       </div>
 
       <div class="price-card price-card--featured reveal">
@@ -1430,7 +1479,7 @@
           <li>Månedlig aktivitetsoppsummering</li>
           <li>Gratis prøvetur ved oppstart</li>
         </ul>
-        <a href="#pamelding" class="btn btn--primary price-card__btn">Velg Deltidspakke</a>
+        <a href="booking.html" class="btn btn--primary price-card__btn">Velg Deltidspakke</a>
       </div>
 
       <div class="price-card reveal">
@@ -1450,7 +1499,7 @@
           <li>Eksklusiv frokoststund i buggy</li>
           <li>2 gratis erstatningsdager/mnd</li>
         </ul>
-        <a href="#pamelding" class="btn btn--forest price-card__btn">Velg Heltidspakke</a>
+        <a href="booking.html" class="btn btn--forest price-card__btn">Velg Heltidspakke</a>
       </div>
 
     </div>

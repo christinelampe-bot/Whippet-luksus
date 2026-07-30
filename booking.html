@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book plass — Whippet Luksus</title>
+  <meta name="description" content="Book dagplass for din whippet. Se tilgjengelighet og bestill din plass i dag." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --mauve:       #E0B0FF;
+      --mauve-deep:  #B060E8;
+      --mauve-dark:  #2D1B4E;
+      --mauve-mid:   #7B3DB8;
+      --mauve-light: #F0D5FF;
+      --mauve-pale:  #FAF2FF;
+      --mauve-bg:    #F5EAFF;
+      --dark:        #1A0F2E;
+      --text:        #2D1B4E;
+      --text-muted:  #7A6090;
+      --border:      #E5D0F5;
+      --success:     #4CAF50;
+      --warning:     #FF9800;
+      --danger:      #E53935;
+      --r:           10px;
+      --r-lg:        22px;
+      --r-xl:        32px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--mauve-pale);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 15, 46, 0.96);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 66px;
+      border-bottom: 1px solid rgba(224,176,255,0.15);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--mauve);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-logo svg { width: 28px; height: 28px; }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--r);
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover { color: var(--mauve); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--mauve-mid), var(--mauve-deep));
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 500;
+    }
+
+    .nav-cta:hover { opacity: 0.88; color: #fff !important; }
+
+    /* ── HERO ── */
+    .booking-hero {
+      background: linear-gradient(145deg, #1A0F2E 0%, #2D1B4E 40%, #7B3DB8 80%, #B060E8 100%);
+      padding: 60px 5% 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 120%, rgba(224,176,255,0.12) 0%, transparent 70%);
+    }
+
+    .hero-paws {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-paw {
+      position: absolute;
+      opacity: 0.06;
+      fill: var(--mauve);
+      animation: floatPaw 8s ease-in-out infinite;
+    }
+
+    @keyframes floatPaw {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(8deg); }
+    }
+
+    .booking-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: #fff;
+      position: relative;
+    }
+
+    .booking-hero h1 em {
+      font-style: italic;
+      color: var(--mauve);
+    }
+
+    .booking-hero p {
+      color: rgba(255,255,255,0.7);
+      margin-top: 12px;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .booking-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 5% 80px;
+    }
+
+    /* ── WEEK NAVIGATOR ── */
+    .week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .week-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .week-btn {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      color: var(--mauve-mid);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .week-btn:hover {
+      background: var(--mauve-light);
+      border-color: var(--mauve);
+    }
+
+    .week-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    /* ── DAYS GRID ── */
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 700px) {
+      .days-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 420px) {
+      .days-grid { grid-template-columns: 1fr; }
+    }
+
+    .day-card {
+      background: #fff;
+      border-radius: var(--r-lg);
+      border: 2px solid var(--border);
+      padding: 20px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--mauve-mid), var(--mauve));
+      transform: scaleX(0);
+      transition: transform 0.25s;
+    }
+
+    .day-card:hover::before,
+    .day-card.selected::before { transform: scaleX(1); }
+
+    .day-card:hover,
+    .day-card.selected {
+      border-color: var(--mauve);
+      box-shadow: 0 6px 24px rgba(176, 96, 232, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .day-card.full {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: #f9f9f9;
+    }
+
+    .day-card.full:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .day-card.full::before { display: none; }
+
+    .day-card.past {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .day-card.past:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .day-name {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .day-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .day-route {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 12px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-spots {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .spots-open {
+      background: rgba(76,175,80,0.1);
+      color: #2E7D32;
+    }
+
+    .spots-few {
+      background: rgba(255,152,0,0.12);
+      color: #E65100;
+    }
+
+    .spots-full {
+      background: rgba(229,57,53,0.1);
+      color: #C62828;
+    }
+
+    .day-card-loader {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--mauve-mid);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── PRICING STRIP ── */
+    .pricing-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 700px) {
+      .pricing-strip { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .pricing-strip { grid-template-columns: 1fr; }
+    }
+
+    .price-card {
+      background: #fff;
+      border-radius: var(--r-lg);
+      border: 2px solid var(--border);
+      padding: 22px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .price-card.active {
+      border-color: var(--mauve-deep);
+      background: linear-gradient(135deg, rgba(224,176,255,0.08), rgba(176,96,232,0.05));
+    }
+
+    .price-card:hover { border-color: var(--mauve); }
+
+    .price-radio {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+
+    .price-card.active .price-radio {
+      border-color: var(--mauve-deep);
+      background: var(--mauve-deep);
+    }
+
+    .price-card.active .price-radio::after {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .price-info { flex: 1; }
+
+    .price-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--mauve-dark);
+      margin-bottom: 3px;
+    }
+
+    .price-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .price-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--mauve-deep);
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* ── BOOKING PANEL ── */
+    .booking-panel {
+      background: #fff;
+      border-radius: var(--r-xl);
+      border: 2px solid var(--border);
+      padding: 36px 36px;
+      box-shadow: 0 8px 40px rgba(176, 96, 232, 0.08);
+      display: none;
+    }
+
+    .booking-panel.visible { display: block; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+    }
+
+    .panel-tag {
+      background: linear-gradient(135deg, var(--mauve-light), var(--mauve-bg));
+      border: 1px solid var(--border);
+      color: var(--mauve-mid);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 50px;
+      letter-spacing: 0.05em;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 580px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .booking-panel { padding: 24px 20px; }
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+
+    input, textarea {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--mauve-pale);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--mauve-deep);
+      box-shadow: 0 0 0 3px rgba(176,96,232,0.1);
+    }
+
+    textarea { min-height: 80px; resize: vertical; }
+
+    .form-divider {
+      grid-column: 1 / -1;
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 4px 0;
+    }
+
+    .submit-row {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .total-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--mauve-dark);
+    }
+
+    .total-price span {
+      font-size: 0.8rem;
+      font-family: 'Jost', sans-serif;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .btn-book {
+      background: linear-gradient(135deg, var(--mauve-mid), var(--mauve-deep));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 36px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-book:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-book:active { transform: translateY(0); }
+
+    .btn-book:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+    .btn-book .btn-spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .btn-book.loading .btn-text { opacity: 0; }
+    .btn-book.loading .btn-spinner { display: block; }
+
+    /* ── SELECT DAY HINT ── */
+    .select-hint {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .select-hint-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .select-hint h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      margin-bottom: 8px;
+    }
+
+    .select-hint p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-panel {
+      background: #fff;
+      border-radius: var(--r-xl);
+      border: 2px solid rgba(76,175,80,0.3);
+      padding: 50px 36px;
+      text-align: center;
+      display: none;
+    }
+
+    .success-panel.visible { display: block; }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      background: rgba(76,175,80,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+    }
+
+    .success-panel h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      margin-bottom: 12px;
+    }
+
+    .success-panel p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 420px;
+      margin: 0 auto 28px;
+    }
+
+    .success-details {
+      background: var(--mauve-pale);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: inline-block;
+      text-align: left;
+      margin-bottom: 28px;
+      min-width: 260px;
+    }
+
+    .success-details p { margin: 0; font-size: 0.9rem; color: var(--text); line-height: 1.8; }
+    .success-details strong { color: var(--mauve-deep); }
+
+    .btn-new-booking {
+      background: transparent;
+      border: 2px solid var(--mauve);
+      color: var(--mauve-mid);
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-new-booking:hover {
+      background: var(--mauve-light);
+      border-color: var(--mauve-deep);
+    }
+
+    /* ── ABONNEMENT INFO ── */
+    .abo-info {
+      display: none;
+      background: linear-gradient(135deg, rgba(224,176,255,0.12), rgba(176,96,232,0.07));
+      border: 1.5px solid rgba(176,96,232,0.2);
+      border-radius: var(--r-lg);
+      padding: 16px 20px;
+      font-size: 0.85rem;
+      color: var(--mauve-mid);
+      line-height: 1.6;
+      grid-column: 1 / -1;
+    }
+
+    .abo-info.visible { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 5%;
+      background: var(--dark);
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    footer a {
+      color: var(--mauve);
+      text-decoration: none;
+    }
+
+    /* ── ERROR MESSAGE ── */
+    .error-msg {
+      grid-column: 1 / -1;
+      background: rgba(229,57,53,0.08);
+      border: 1px solid rgba(229,57,53,0.3);
+      color: #C62828;
+      border-radius: var(--r);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="22" cy="14" rx="7" ry="10" fill="#E0B0FF" opacity="0.9"/>
+      <ellipse cx="38" cy="14" rx="7" ry="10" fill="#E0B0FF" opacity="0.9"/>
+      <ellipse cx="12" cy="30" rx="6" ry="8" fill="#E0B0FF" opacity="0.7"/>
+      <ellipse cx="48" cy="30" rx="6" ry="8" fill="#E0B0FF" opacity="0.7"/>
+      <ellipse cx="30" cy="40" rx="16" ry="12" fill="#E0B0FF"/>
+    </svg>
+    Whippet Luksus
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">← Tilbake</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="booking-hero">
+  <div class="hero-paws">
+    <svg class="hero-paw" style="width:90px;top:10%;left:8%;animation-delay:0s" viewBox="0 0 60 60"><ellipse cx="22" cy="14" rx="7" ry="10"/><ellipse cx="38" cy="14" rx="7" ry="10"/><ellipse cx="12" cy="30" rx="6" ry="8"/><ellipse cx="48" cy="30" rx="6" ry="8"/><ellipse cx="30" cy="40" rx="16" ry="12"/></svg>
+    <svg class="hero-paw" style="width:60px;top:20%;right:12%;animation-delay:2s" viewBox="0 0 60 60"><ellipse cx="22" cy="14" rx="7" ry="10"/><ellipse cx="38" cy="14" rx="7" ry="10"/><ellipse cx="12" cy="30" rx="6" ry="8"/><ellipse cx="48" cy="30" rx="6" ry="8"/><ellipse cx="30" cy="40" rx="16" ry="12"/></svg>
+    <svg class="hero-paw" style="width:45px;bottom:15%;left:20%;animation-delay:4s" viewBox="0 0 60 60"><ellipse cx="22" cy="14" rx="7" ry="10"/><ellipse cx="38" cy="14" rx="7" ry="10"/><ellipse cx="12" cy="30" rx="6" ry="8"/><ellipse cx="48" cy="30" rx="6" ry="8"/><ellipse cx="30" cy="40" rx="16" ry="12"/></svg>
+  </div>
+  <h1>Book <em>din plass</em></h1>
+  <p>Velg dag, se ledige plasser og bestill direkte</p>
+</section>
+
+<!-- ── MAIN ── -->
+<main class="booking-wrap">
+
+  <!-- Week navigator -->
+  <div class="week-nav">
+    <button class="week-btn" id="prevWeek" onclick="changeWeek(-1)">
+      ← Forrige uke
+    </button>
+    <div class="week-label" id="weekLabel">Laster…</div>
+    <button class="week-btn" id="nextWeek" onclick="changeWeek(1)">
+      Neste uke →
+    </button>
+  </div>
+
+  <!-- Days grid -->
+  <div class="days-grid" id="daysGrid">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- Pricing choice -->
+  <div class="pricing-strip" id="pricingStrip">
+    <div class="price-card active" id="cardEnkelt" onclick="selectType('enkeltdag')">
+      <div class="price-radio" id="radioEnkelt"></div>
+      <div class="price-info">
+        <div class="price-label">Enkeltdag</div>
+        <div class="price-desc">Én dag uten binding — perfekt for å prøve</div>
+      </div>
+      <div class="price-amount">kr 395</div>
+    </div>
+    <div class="price-card" id="cardAbo" onclick="selectType('abonnement')">
+      <div class="price-radio" id="radioAbo"></div>
+      <div class="price-info">
+        <div class="price-label">5-dagerspakke</div>
+        <div class="price-desc">Forhåndsbetal 5 dager — bruk når du vil (29% spart)</div>
+      </div>
+      <div class="price-amount">kr 1 399</div>
+    </div>
+    <div class="price-card" id="cardMnd" onclick="selectType('manedlig')">
+      <div class="price-radio" id="radioMnd"></div>
+      <div class="price-info">
+        <div class="price-label">Månedspakke</div>
+        <div class="price-desc">Opptil 5 dager/mnd — spredt eller sammenhengende (49% spart)</div>
+      </div>
+      <div class="price-amount">kr 1 000<span style="font-family:'Jost',sans-serif;font-size:0.7rem;color:var(--text-muted);font-weight:400">/mnd</span></div>
+    </div>
+  </div>
+
+  <!-- Booking form panel -->
+  <div class="booking-panel" id="bookingPanel">
+    <div class="panel-header">
+      <div class="panel-title" id="panelTitle">Velg en dag ovenfor</div>
+      <div class="panel-tag" id="panelTag">—</div>
+    </div>
+
+    <form id="bookingForm">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="navn">Ditt navn</label>
+          <input type="text" id="navn" name="navn" placeholder="Ola Nordmann" required />
+        </div>
+
+        <div class="form-group">
+          <label for="epost">E-post</label>
+          <input type="email" id="epost" name="epost" placeholder="hund@eier.no" required />
+        </div>
+
+        <div class="form-group">
+          <label for="telefon">Telefon (valgfri)</label>
+          <input type="tel" id="telefon" name="telefon" placeholder="400 00 000" />
+        </div>
+
+        <div class="form-group">
+          <label for="hund_navn">Hundens navn</label>
+          <input type="text" id="hund_navn" name="hund_navn" placeholder="Lynet" required />
+        </div>
+
+        <div class="abo-info" id="aboInfo">
+          🐾 <strong>5-dagerspakke — kr 1 399 (29% spart)</strong><br/>
+          Du bestiller nå første dag og vi kontakter deg på e-post for å sette opp de resterende 4 dagene. Betaling skjer ved første oppmøte.
+        </div>
+
+        <div class="abo-info" id="mndInfo">
+          📅 <strong>Månedspakke — kr 1 000/mnd (49% spart)</strong><br/>
+          Opptil 5 dager per kalendermåned. Datoene kan spres fritt eller sammenhengende. Fornyes månedlig — avslutt når du vil. Vi kontakter deg for å bekrefte datoer.
+        </div>
+
+        <hr class="form-divider" />
+
+        <div class="form-group full">
+          <label for="melding">Melding (valgfri)</label>
+          <textarea id="melding" name="melding" placeholder="Eventuelle spørsmål, informasjon om hunden…"></textarea>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="submit-row">
+          <div class="total-price" id="totalPrice">
+            kr 395 <span>enkeltdag</span>
+          </div>
+          <button type="submit" class="btn-book" id="submitBtn">
+            <span class="btn-text">Bekreft booking</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Hint when no day selected -->
+  <div class="select-hint" id="selectHint">
+    <span class="select-hint-icon">🐾</span>
+    <h3>Velg en ledig dag</h3>
+    <p>Klikk på en dag i kalender ovenfor for å se<br/>ledige plasser og fylle ut bestillingsskjema.</p>
+  </div>
+
+  <!-- Success state -->
+  <div class="success-panel" id="successPanel">
+    <div class="success-icon">🐾</div>
+    <h2>Booking bekreftet!</h2>
+    <p id="successText">Vi gleder oss til å ta imot deg og din whippet. Du vil motta en bekreftelse på e-post.</p>
+    <div class="success-details" id="successDetails"></div>
+    <button class="btn-new-booking" onclick="resetBooking()">Book en ny dag</button>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025 Whippet Luksus · Oslo · <a href="mailto:hei@whippetluksus.no">hei@whippetluksus.no</a></p>
+</footer>
+
+<!-- ── SCRIPTS ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG ──
+const SUPABASE_URL     = 'https://nobmpsyqwalpnlsrtgny.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYm1wc3lxd2FscG5sc3J0Z255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODUwMjQsImV4cCI6MjA5MzU2MTAyNH0.qNuTctR_kDhEItvKR53craND1l0BybSRei5olPxXCz8';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── ROUTE CONFIG ──
+const RUTER = {
+  1: { name: 'Vindern & Holmenkollen', emoji: '🌲', maks: 6 },
+  2: { name: 'Nordstrand',             emoji: '🌊', maks: 6 },
+  3: { name: 'Høvik & Jar',            emoji: '🍃', maks: 6 },
+  4: { name: 'Oslo Sentrum',           emoji: '🏙️', maks: 4 },
+  5: { name: 'Lillestrøm & Rælingen',  emoji: '🌾', maks: 6 },
+};
+
+const UKEDAGER = ['mandag','tirsdag','onsdag','torsdag','fredag'];
+const UKEDAGER_SHORT = ['Man','Tir','Ons','Tor','Fre'];
+const MONTHS_NO = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
+
+// ── STATE ──
+let weekOffset   = 0;       // 0 = this week
+let selectedDate = null;    // ISO string "YYYY-MM-DD"
+let selectedRute = null;
+let selectedUkedag = null;
+let bookingType  = 'enkeltdag';
+let bookings     = {};      // { "YYYY-MM-DD": count }
+
+// ── DATE HELPERS ──
+function getMondayOf(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = (day === 0) ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function toISODate(date) {
+  return date.toISOString().split('T')[0];
+}
+
+function getWeekDates(offset) {
+  const today = new Date();
+  const monday = getMondayOf(today);
+  monday.setDate(monday.getDate() + offset * 7);
+  return Array.from({ length: 5 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + i);
+    return d;
+  });
+}
+
+// ── LOAD AVAILABILITY ──
+async function loadAvailability(dates) {
+  const from = toISODate(dates[0]);
+  const to   = toISODate(dates[4]);
+
+  const { data, error } = await sb
+    .from('bookinger')
+    .select('dato')
+    .gte('dato', from)
+    .lte('dato', to)
+    .eq('status', 'bekreftet');
+
+  bookings = {};
+  if (data) {
+    data.forEach(row => {
+      bookings[row.dato] = (bookings[row.dato] || 0) + 1;
+    });
+  }
+}
+
+// ── RENDER WEEK ──
+async function renderWeek() {
+  const dates  = getWeekDates(weekOffset);
+  const today  = new Date(); today.setHours(0,0,0,0);
+  const monday = dates[0];
+  const friday = dates[4];
+
+  // Update week label
+  const fromDay   = monday.getDate();
+  const fromMonth = MONTHS_NO[monday.getMonth()];
+  const toDay     = friday.getDate();
+  const toMonth   = MONTHS_NO[friday.getMonth()];
+  document.getElementById('weekLabel').textContent =
+    fromMonth === toMonth
+      ? `${fromDay}–${toDay}. ${fromMonth} ${friday.getFullYear()}`
+      : `${fromDay}. ${fromMonth} – ${toDay}. ${toMonth} ${friday.getFullYear()}`;
+
+  // Disable prev if this week or past
+  const thisMonday = getMondayOf(new Date());
+  document.getElementById('prevWeek').disabled =
+    monday.getTime() <= thisMonday.getTime();
+
+  // Show skeleton
+  const grid = document.getElementById('daysGrid');
+  grid.innerHTML = dates.map((_, i) =>
+    `<div class="day-card" style="pointer-events:none">
+       <div class="day-name">${UKEDAGER_SHORT[i]}</div>
+       <div class="day-date">—</div>
+       <div class="day-route">&nbsp;</div>
+       <div class="day-spots"><span class="day-card-loader"></span></div>
+     </div>`
+  ).join('');
+
+  // Load availability
+  await loadAvailability(dates);
+
+  // Render cards
+  grid.innerHTML = dates.map((date, i) => {
+    const iso     = toISODate(date);
+    const dayNum  = i + 1;               // 1=Mon
+    const rute    = RUTER[dayNum];
+    const booket  = bookings[iso] || 0;
+    const ledige  = Math.max(0, rute.maks - booket);
+    const isPast  = date < today;
+
+    let spotsClass, spotsText;
+    if (isPast) {
+      spotsClass = 'spots-full'; spotsText = 'Passert';
+    } else if (ledige === 0) {
+      spotsClass = 'spots-full'; spotsText = 'Fullt';
+    } else if (ledige <= 2) {
+      spotsClass = 'spots-few'; spotsText = `${ledige} ledig`;
+    } else {
+      spotsClass = 'spots-open'; spotsText = `${ledige} ledige`;
+    }
+
+    const isSelected = iso === selectedDate;
+    const isDisabled = isPast || ledige === 0;
+    const cardClass = [
+      'day-card',
+      isSelected ? 'selected' : '',
+      isDisabled  ? (isPast ? 'past' : 'full') : '',
+    ].join(' ').trim();
+
+    const clickAttr = isDisabled ? '' :
+      `onclick="selectDay('${iso}', '${rute.name}', '${UKEDAGER[i]}')"`;
+
+    return `<div class="${cardClass}" ${clickAttr}>
+      <div class="day-name">${UKEDAGER_SHORT[i]}</div>
+      <div class="day-date">${date.getDate()}</div>
+      <div class="day-route">${rute.emoji} ${rute.name}</div>
+      <div class="day-spots ${spotsClass}">${spotsText}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── CHANGE WEEK ──
+async function changeWeek(delta) {
+  weekOffset += delta;
+  selectedDate = null;
+  showPanel(false);
+  await renderWeek();
+}
+
+// ── SELECT DAY ──
+function selectDay(iso, rute, ukedag) {
+  selectedDate  = iso;
+  selectedRute  = rute;
+  selectedUkedag = ukedag;
+
+  // Re-render to show selected highlight
+  document.querySelectorAll('.day-card').forEach((card, i) => {
+    const dates = getWeekDates(weekOffset);
+    const cardIso = toISODate(dates[i]);
+    card.classList.toggle('selected', cardIso === iso);
+  });
+
+  // Update panel header
+  const dateObj    = new Date(iso + 'T12:00:00');
+  const dayNo      = dateObj.getDate();
+  const monthName  = MONTHS_NO[dateObj.getMonth()];
+  const dayIndex   = dateObj.getDay() === 0 ? 6 : dateObj.getDay() - 1;
+  const fullUkedag = UKEDAGER[dayIndex];
+  const cap        = fullUkedag.charAt(0).toUpperCase() + fullUkedag.slice(1);
+
+  document.getElementById('panelTitle').textContent =
+    `${cap} ${dayNo}. ${monthName}`;
+  document.getElementById('panelTag').textContent = rute;
+
+  showPanel(true);
+  updatePriceDisplay();
+
+  // Smooth scroll
+  setTimeout(() => {
+    document.getElementById('bookingPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+// ── SHOW/HIDE PANEL ──
+function showPanel(show) {
+  document.getElementById('bookingPanel').classList.toggle('visible', show);
+  document.getElementById('selectHint').style.display = show ? 'none' : '';
+  document.getElementById('successPanel').classList.remove('visible');
+}
+
+// ── SELECT BOOKING TYPE ──
+function selectType(type) {
+  bookingType = type;
+  document.getElementById('cardEnkelt').classList.toggle('active', type === 'enkeltdag');
+  document.getElementById('cardAbo').classList.toggle('active', type === 'abonnement');
+  document.getElementById('cardMnd').classList.toggle('active', type === 'manedlig');
+  document.getElementById('aboInfo').classList.toggle('visible', type === 'abonnement');
+  document.getElementById('mndInfo').classList.toggle('visible', type === 'manedlig');
+  updatePriceDisplay();
+}
+
+function updatePriceDisplay() {
+  const prices = {
+    enkeltdag:  'kr 395 <span>enkeltdag</span>',
+    abonnement: 'kr 1 399 <span>5-dagerspakke</span>',
+    manedlig:   'kr 1 000 <span>månedspakke/mnd</span>',
+  };
+  document.getElementById('totalPrice').innerHTML = prices[bookingType] || prices.enkeltdag;
+}
+
+// ── SUBMIT BOOKING ──
+document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!selectedDate) return;
+
+  const btn = document.getElementById('submitBtn');
+  const err = document.getElementById('errorMsg');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  err.classList.remove('visible');
+
+  const navn      = document.getElementById('navn').value.trim();
+  const epost     = document.getElementById('epost').value.trim();
+  const telefon   = document.getElementById('telefon').value.trim();
+  const hund_navn = document.getElementById('hund_navn').value.trim();
+  const melding   = document.getElementById('melding').value.trim();
+
+  // Final availability check
+  const { count: booketNow } = await sb
+    .from('bookinger')
+    .select('id', { count: 'exact', head: true })
+    .eq('dato', selectedDate)
+    .eq('status', 'bekreftet');
+
+  const dayIndex = new Date(selectedDate + 'T12:00:00').getDay();
+  const ruteDayNo = dayIndex === 0 ? 7 : dayIndex;
+  const rute = RUTER[ruteDayNo];
+  if (rute && booketNow >= rute.maks) {
+    showError('Beklager — denne dagen ble fullbooket akkurat nå. Velg en annen dag.');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    return;
+  }
+
+  const { error } = await sb.from('bookinger').insert({
+    dato:      selectedDate,
+    ukedag:    selectedUkedag,
+    rute:      selectedRute,
+    navn,
+    epost,
+    telefon:   telefon || null,
+    hund_navn,
+    type:      bookingType,
+    status:    'bekreftet',
+  });
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+
+  if (error) {
+    showError('Noe gikk galt. Prøv igjen eller kontakt oss på hei@whippetluksus.no');
+    return;
+  }
+
+  // Show success
+  const dateObj   = new Date(selectedDate + 'T12:00:00');
+  const dayNo     = dateObj.getDate();
+  const monthName = MONTHS_NO[dateObj.getMonth()];
+
+  const typeLabels = {
+    enkeltdag:  'Enkeltdag',
+    abonnement: '5-dagerspakke',
+    manedlig:   'Månedspakke',
+  };
+  const priceLabels = {
+    enkeltdag:  'kr 395',
+    abonnement: 'kr 1 399',
+    manedlig:   'kr 1 000/mnd',
+  };
+
+  document.getElementById('successDetails').innerHTML = `
+    <p>
+      <strong>Dag:</strong> ${dayNo}. ${monthName}<br/>
+      <strong>Rute:</strong> ${selectedRute}<br/>
+      <strong>Hund:</strong> ${hund_navn}<br/>
+      <strong>Type:</strong> ${typeLabels[bookingType] || bookingType}<br/>
+      <strong>Pris:</strong> ${priceLabels[bookingType] || ''}
+    </p>`;
+
+  if (bookingType === 'abonnement') {
+    document.getElementById('successText').textContent =
+      'Vi gleder oss! Vi kontakter deg snart på e-post for å bekrefte de resterende 4 dagene i 5-dagerspakken din.';
+  } else if (bookingType === 'manedlig') {
+    document.getElementById('successText').textContent =
+      'Velkommen som månedlig abonnent! Vi kontakter deg på e-post for å planlegge alle dagene dine denne måneden.';
+  }
+
+  document.getElementById('bookingPanel').classList.remove('visible');
+  document.getElementById('selectHint').style.display = 'none';
+  document.getElementById('successPanel').classList.add('visible');
+
+  // Refresh availability
+  await renderWeek();
+});
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+// ── RESET ──
+function resetBooking() {
+  selectedDate  = null;
+  selectedRute  = null;
+  bookingType   = 'enkeltdag';
+  document.getElementById('bookingForm').reset();
+  document.getElementById('successPanel').classList.remove('visible');
+  document.getElementById('selectHint').style.display = '';
+  selectType('enkeltdag');
+  renderWeek();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── INIT ──
+renderWeek();
+</script>
+</body>
+</html>
