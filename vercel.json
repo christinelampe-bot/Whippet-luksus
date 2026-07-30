@@ -6,6 +6,8 @@
   "routes": [
     { "src": "/booking", "dest": "/booking.html" },
     { "src": "/booking.html", "dest": "/booking.html" },
+    { "src": "/survey", "dest": "/survey.html" },
+    { "src": "/survey.html", "dest": "/survey.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "buildCommand": null,
