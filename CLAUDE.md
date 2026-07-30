@@ -79,12 +79,18 @@ Oslos første mobile hundedagplass for whippets og myndefamilien. Inspirert av [
 
 ```
 Whippet luksus/
-├── index.html                  — Markedsføringssiden (landing page)
-├── booking.html                — Bookingsystem med kalender + samtykkeskjema + Vipps
-├── survey.html                 — Markedsvalideringssurvey (10 spørsmål til potensielle kunder)
-├── supabase_booking_setup.sql  — SQL som er kjørt i Supabase (tabellstruktur)
-├── vercel.json                 — Vercel routing (serverer begge .html-filer)
-├── CLAUDE.md                   — Denne filen
+├── index.html                       — Markedsføringssiden (landing page)
+├── booking.html                     — Bookingsystem med kalender + samtykkeskjema + Vipps
+├── admin.html                       — Admin-side: steng/åpne bookingperioder (passord: WhippetLuksus2026)
+├── survey.html                      — Markedsvalideringssurvey (10 spørsmål til potensielle kunder)
+├── supabase_booking_setup.sql       — SQL for bookinger-tabell (kjørt)
+├── supabase_stengte_perioder.sql    — SQL for stengte_perioder-tabell (må kjøres i Supabase)
+├── manifest.json                    — PWA-manifest for hjemskjermikon
+├── apple-touch-icon.png             — iOS-ikon (180x180)
+├── icon-192.png / icon-512.png      — PWA-ikoner
+├── favicon-32x32.png                — Nettleserfavicon
+├── vercel.json                      — Vercel routing
+├── CLAUDE.md                        — Denne filen
 ```
 
 ---

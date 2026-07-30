@@ -1297,6 +1297,7 @@ let selectedRute = null;
 let selectedUkedag = null;
 let bookingType  = 'enkeltdag';
 let bookings     = {};      // { "YYYY-MM-DD": count }
+let stengeDatoer = new Set(); // ISO dates that are closed
 
 // ── DATE HELPERS ──
 function getMondayOf(date) {
@@ -1328,7 +1329,8 @@ async function loadAvailability(dates) {
   const from = toISODate(dates[0]);
   const to   = toISODate(dates[4]);
 
-  const { data, error } = await sb
+  // Load bookings
+  const { data: bookingData } = await sb
     .from('bookinger')
     .select('dato')
     .gte('dato', from)
@@ -1336,9 +1338,28 @@ async function loadAvailability(dates) {
     .eq('status', 'bekreftet');
 
   bookings = {};
-  if (data) {
-    data.forEach(row => {
+  if (bookingData) {
+    bookingData.forEach(row => {
       bookings[row.dato] = (bookings[row.dato] || 0) + 1;
+    });
+  }
+
+  // Load closed periods
+  const { data: stengtData } = await sb
+    .from('stengte_perioder')
+    .select('fra_dato, til_dato')
+    .lte('fra_dato', to)
+    .gte('til_dato', from);
+
+  stengeDatoer = new Set();
+  if (stengtData) {
+    stengtData.forEach(({ fra_dato, til_dato }) => {
+      const cur = new Date(fra_dato + 'T12:00:00');
+      const end = new Date(til_dato + 'T12:00:00');
+      while (cur <= end) {
+        stengeDatoer.add(toISODate(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
     });
   }
 }
@@ -1388,9 +1409,13 @@ async function renderWeek() {
     const ledige  = Math.max(0, rute.maks - booket);
     const isPast  = date < today;
 
+    const isStengt = stengeDatoer.has(iso);
+
     let spotsClass, spotsText;
     if (isPast) {
       spotsClass = 'spots-full'; spotsText = 'Passert';
+    } else if (isStengt) {
+      spotsClass = 'spots-full'; spotsText = 'Stengt';
     } else if (ledige === 0) {
       spotsClass = 'spots-full'; spotsText = 'Fullt';
     } else if (ledige <= 2) {
@@ -1400,7 +1425,7 @@ async function renderWeek() {
     }
 
     const isSelected = iso === selectedDate;
-    const isDisabled = isPast || ledige === 0;
+    const isDisabled = isPast || ledige === 0 || isStengt;
     const cardClass = [
       'day-card',
       isSelected ? 'selected' : '',

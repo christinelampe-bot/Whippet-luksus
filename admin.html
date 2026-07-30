@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whippet Luksus — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --mauve:      #E0B0FF;
+      --mauve-deep: #B060E8;
+      --mauve-dark: #2D1B4E;
+      --text:       #2D1B4E;
+      --text-muted: #7A6090;
+      --border:     #E5D0F5;
+      --bg:         #FAF2FF;
+      --red:        #E53E3E;
+      --green:      #38A169;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── LOGIN ── */
+    #loginScreen {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 40px rgba(45,27,78,.15);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-paw { font-size: 3rem; margin-bottom: 1rem; }
+    .login-title { font-size: 1.4rem; font-weight: 600; color: var(--mauve-dark); margin-bottom: 0.3rem; }
+    .login-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .login-input {
+      width: 100%; padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 1rem;
+      margin-bottom: 1rem; outline: none;
+    }
+    .login-input:focus { border-color: var(--mauve-deep); }
+    .login-btn {
+      width: 100%; padding: 0.85rem;
+      background: var(--mauve-dark); color: white;
+      border: none; border-radius: 8px;
+      font-family: inherit; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .login-btn:hover { opacity: .85; }
+    .login-error { color: var(--red); font-size: 0.85rem; margin-top: 0.75rem; display: none; }
+
+    /* ── ADMIN PANEL ── */
+    #adminPanel { display: none; width: 100%; max-width: 700px; }
+
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .admin-header h1 { font-size: 1.4rem; font-weight: 600; color: var(--mauve-dark); }
+    .admin-header small { font-size: 0.8rem; color: var(--text-muted); }
+    .logout-btn {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 0.4rem 0.9rem;
+      font-family: inherit; font-size: 0.85rem; color: var(--text-muted);
+      cursor: pointer;
+    }
+    .logout-btn:hover { border-color: var(--mauve-deep); color: var(--text); }
+
+    .card {
+      background: white; border-radius: 14px;
+      padding: 1.5rem; box-shadow: 0 4px 20px rgba(45,27,78,.09);
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      font-size: 1rem; font-weight: 600; color: var(--mauve-dark);
+      margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* Add form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 0.65rem 0.9rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 0.95rem; outline: none;
+      transition: border-color .15s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--mauve-deep); }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+    .add-btn {
+      background: var(--mauve-dark); color: white;
+      border: none; border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-family: inherit; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .add-btn:hover { opacity: .85; }
+    .add-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* Periods list */
+    .period-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .period-item:last-child { border-bottom: none; }
+    .period-dates { font-weight: 500; font-size: 0.95rem; }
+    .period-msg { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .period-badge {
+      display: inline-block; background: #FFF0F0; color: var(--red);
+      border: 1px solid #FED7D7; border-radius: 6px;
+      font-size: 0.72rem; font-weight: 600; padding: 0.15rem 0.5rem;
+      margin-right: 0.5rem; vertical-align: middle;
+    }
+    .delete-btn {
+      background: none; border: 1.5px solid #FED7D7;
+      border-radius: 8px; padding: 0.35rem 0.75rem;
+      color: var(--red); font-family: inherit; font-size: 0.82rem;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .delete-btn:hover { background: #FFF0F0; }
+
+    .empty-state {
+      text-align: center; padding: 2rem;
+      color: var(--text-muted); font-size: 0.9rem;
+    }
+    .empty-state .empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .success-msg {
+      background: #F0FFF4; color: var(--green);
+      border: 1px solid #C6F6D5; border-radius: 8px;
+      padding: 0.75rem 1rem; font-size: 0.88rem;
+      margin-top: 0.75rem; display: none;
+    }
+    .error-msg-form {
+      color: var(--red); font-size: 0.85rem;
+      margin-top: 0.5rem; display: none;
+    }
+
+    /* Nav links */
+    .nav-links {
+      text-align: center; margin-bottom: 1.5rem;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .nav-links a { color: var(--mauve-deep); text-decoration: none; margin: 0 0.5rem; }
+    .nav-links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="loginScreen">
+  <div class="login-paw">🐾</div>
+  <div class="login-title">Whippet Luksus Admin</div>
+  <div class="login-sub">Logg inn for å administrere bookinger</div>
+  <input type="password" id="passInput" class="login-input" placeholder="Passord" autocomplete="current-password">
+  <button class="login-btn" onclick="login()">Logg inn</button>
+  <div class="login-error" id="loginError">Feil passord — prøv igjen</div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="adminPanel">
+  <div class="nav-links">
+    <a href="/">← Forsiden</a> · <a href="/booking">Bookingsiden</a>
+  </div>
+
+  <div class="admin-header">
+    <div>
+      <h1>🐾 Admin — Whippet Luksus</h1>
+      <small>Steng og åpne bookingperioder</small>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logg ut</button>
+  </div>
+
+  <!-- Add period -->
+  <div class="card">
+    <h2>🔒 Steng periode</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Fra dato</label>
+        <input type="date" id="fraDato">
+      </div>
+      <div class="form-group">
+        <label>Til dato</label>
+        <input type="date" id="tilDato">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Melding til kunder (vises ikke offentlig, kun intern)</label>
+      <input type="text" id="melding" placeholder="f.eks. Sommerferie, Syk, Kurs">
+    </div>
+    <button class="add-btn" id="addBtn" onclick="addPeriod()">Steng bookinger</button>
+    <div class="success-msg" id="addSuccess">✓ Periode lagt til — bookingsiden oppdateres umiddelbart.</div>
+    <div class="error-msg-form" id="addError"></div>
+  </div>
+
+  <!-- Existing periods -->
+  <div class="card">
+    <h2>📅 Aktive stengte perioder</h2>
+    <div id="periodsList">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        Laster…
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL     = 'https://nobmpsyqwalpnlsrtgny.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYm1wc3lxd2FscG5sc3J0Z255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODUwMjQsImV4cCI6MjA5MzU2MTAyNH0.qNuTctR_kDhEItvKR53craND1l0BybSRei5olPxXCz8';
+
+// ── CHANGE THIS PASSWORD ──
+const ADMIN_PASSWORD_HASH = '8e4a4e3dfe1ea7d9b5ed70c2c2888cda7f9e9ade6b54c71bb89d5b0e6fbb4b5e';
+// Default password: WhippetLuksus2026
+// To change: compute SHA-256 of new password and replace the hash above
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── AUTH ──
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function login() {
+  const input = document.getElementById('passInput').value;
+  const hash = await sha256(input);
+  if (hash === ADMIN_PASSWORD_HASH) {
+    sessionStorage.setItem('wl_admin', '1');
+    showAdmin();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('passInput').value = '';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('wl_admin');
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+}
+
+function showAdmin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  setDefaultDates();
+  loadPeriods();
+}
+
+// Check if already logged in
+if (sessionStorage.getItem('wl_admin')) showAdmin();
+
+// Enter key on password field
+document.getElementById('passInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+
+// ── DATE HELPERS ──
+function toNO(iso) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-');
+  return `${d}.${m}.${y}`;
+}
+
+function setDefaultDates() {
+  const today = new Date();
+  const todayISO = today.toISOString().split('T')[0];
+  document.getElementById('fraDato').value = todayISO;
+  document.getElementById('tilDato').value = todayISO;
+}
+
+// ── LOAD PERIODS ──
+async function loadPeriods() {
+  const list = document.getElementById('periodsList');
+  list.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div>Laster…</div>';
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const { data, error } = await sb
+    .from('stengte_perioder')
+    .select('*')
+    .gte('til_dato', today)
+    .order('fra_dato', { ascending: true });
+
+  if (error || !data || data.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✅</div>
+        Ingen aktive stengte perioder — alle dager er åpne for booking.
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = data.map(p => `
+    <div class="period-item">
+      <div>
+        <div class="period-dates">
+          <span class="period-badge">STENGT</span>
+          ${toNO(p.fra_dato)} – ${toNO(p.til_dato)}
+        </div>
+        <div class="period-msg">${p.melding || 'Ingen melding'}</div>
+      </div>
+      <button class="delete-btn" onclick="deletePeriod(${p.id})">Slett</button>
+    </div>
+  `).join('');
+}
+
+// ── ADD PERIOD ──
+async function addPeriod() {
+  const fra = document.getElementById('fraDato').value;
+  const til = document.getElementById('tilDato').value;
+  const msg = document.getElementById('melding').value.trim() || 'Stengt for bookinger';
+  const errEl = document.getElementById('addError');
+  const successEl = document.getElementById('addSuccess');
+
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!fra || !til) {
+    errEl.textContent = 'Fyll inn både fra- og til-dato.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (til < fra) {
+    errEl.textContent = 'Til-dato kan ikke være før fra-dato.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true;
+  btn.textContent = 'Lagrer…';
+
+  const { error } = await sb
+    .from('stengte_perioder')
+    .insert({ fra_dato: fra, til_dato: til, melding: msg });
+
+  btn.disabled = false;
+  btn.textContent = 'Steng bookinger';
+
+  if (error) {
+    errEl.textContent = 'Feil: ' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  successEl.style.display = 'block';
+  setTimeout(() => successEl.style.display = 'none', 4000);
+  document.getElementById('melding').value = '';
+  setDefaultDates();
+  await loadPeriods();
+}
+
+// ── DELETE PERIOD ──
+async function deletePeriod(id) {
+  if (!confirm('Slett denne stengte perioden?')) return;
+
+  const { error } = await sb
+    .from('stengte_perioder')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    alert('Feil ved sletting: ' + error.message);
+    return;
+  }
+  await loadPeriods();
+}
+</script>
+</body>
+</html>
