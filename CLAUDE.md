@@ -23,13 +23,16 @@ Oslos første mobile hundedagplass for whippets og myndefamilien. Inspirert av [
 
 ## Ruter & kapasitet
 
-| Dag | Område | Maks hunder |
-|-----|--------|-------------|
-| Mandag | Vindern & Holmenkollen | 8 |
-| Tirsdag | Nordstrand | 8 |
-| Onsdag | Høvik & Jar | 8 |
-| Torsdag | Oslo Sentrum | 8 |
-| Fredag | Lillestrøm & Rælingen | 8 |
+**Opphenting:** Hele Oslo og omegn alle dager — kunden trenger IKKE bo i det aktuelle området.
+**Naturmål per dag** (der buggyen tar hundene):
+
+| Dag | Naturmål | Maks hunder |
+|-----|----------|-------------|
+| Mandag | Vindern & Holmenkollen (Nordmarka, skog) | 8 |
+| Tirsdag | Nordstrand (Oslofjorden, Ekeberg) | 8 |
+| Onsdag | Høvik & Jar (Lysakerelveni, elvesti) | 8 |
+| Torsdag | Oslo Sentrum (Frognerparken, Aker Brygge) | 8 |
+| Fredag | Lillestrøm & Rælingen (åpne jorder, sprint) | 8 |
 
 ---
 

@@ -985,6 +985,7 @@
   </div>
   <h1>Book <em>din plass</em></h1>
   <p>Velg dag, se ledige plasser og bestill direkte</p>
+  <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.5);letter-spacing:0.06em">🚐 Hjemmehenting i hele Oslo og omegn · 🌿 Naturmål varierer per dag</p>
 </section>
 
 <!-- ── MAIN ── -->
@@ -1412,7 +1413,7 @@ async function renderWeek() {
     return `<div class="${cardClass}" ${clickAttr}>
       <div class="day-name">${UKEDAGER_SHORT[i]}</div>
       <div class="day-date">${date.getDate()}</div>
-      <div class="day-route">${rute.emoji} ${rute.name}</div>
+      <div class="day-route">${rute.emoji} <span style="font-size:0.65rem;color:var(--text-muted)">Naturmål:</span> ${rute.name}</div>
       <div class="day-spots ${spotsClass}">${spotsText}</div>
     </div>`;
   }).join('');
