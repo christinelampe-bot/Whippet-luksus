@@ -1,51 +1,77 @@
 -- ============================================================
 -- Whippet Luksus — Booking System Setup
 -- Run this in Supabase SQL Editor
+-- Drop existing table first if re-running: DROP TABLE IF EXISTS bookinger CASCADE;
 -- ============================================================
 
--- Bookinger table
--- Stores each single day booking or first day of a subscription
--- ============================================================
 CREATE TABLE IF NOT EXISTS bookinger (
-  id            UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  dato          DATE NOT NULL,
-  ukedag        TEXT NOT NULL,         -- 'mandag','tirsdag' etc.
-  rute          TEXT NOT NULL,         -- 'Vindern & Holmenkollen' etc.
-  navn          TEXT NOT NULL,
-  epost         TEXT NOT NULL,
-  telefon       TEXT,
-  hund_navn     TEXT NOT NULL,
-  type          TEXT NOT NULL DEFAULT 'enkeltdag',   -- 'enkeltdag' | 'abonnement'
-  status        TEXT NOT NULL DEFAULT 'bekreftet',   -- 'bekreftet' | 'avlyst'
-  created_at    TIMESTAMPTZ DEFAULT NOW()
+  id                    UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+
+  -- Booking details
+  dato                  DATE NOT NULL,
+  ukedag                TEXT NOT NULL,                        -- 'mandag','tirsdag' etc.
+  rute                  TEXT NOT NULL,                        -- 'Vindern & Holmenkollen' etc.
+  type                  TEXT NOT NULL DEFAULT 'enkeltdag',    -- 'enkeltdag' | 'abonnement' | 'manedlig'
+  status                TEXT NOT NULL DEFAULT 'bekreftet',    -- 'bekreftet' | 'avlyst'
+
+  -- Owner info
+  navn                  TEXT NOT NULL,
+  epost                 TEXT NOT NULL,
+  telefon               TEXT,
+  melding               TEXT,
+
+  -- Dog info
+  hund_navn             TEXT NOT NULL,
+  hund_kjonn            TEXT,
+  hund_alder            TEXT,
+  hund_vekt             NUMERIC(4,1),
+
+  -- Health & consent
+  medisiner             TEXT,
+  allergier             TEXT,
+  siste_vaksine         TEXT,
+  loppebehandling       TEXT,
+  vet_navn              TEXT,
+  vet_telefon           TEXT,
+  noedkontakt_navn      TEXT,
+  noedkontakt_telefon   TEXT,
+  atferd                TEXT,
+
+  -- Samtykker
+  samtykke_noedvet      BOOLEAN DEFAULT false,
+  samtykke_bilde        BOOLEAN DEFAULT false,
+  samtykke_vilkaar      BOOLEAN DEFAULT false,
+  samtykke_dato         TIMESTAMPTZ DEFAULT NOW(),
+
+  -- Vipps payment (activated when VIPPS_ENABLED = true in booking.html)
+  betaling_status       TEXT DEFAULT 'venter',    -- 'venter' | 'betalt' | 'refundert'
+  vipps_ref             TEXT,                     -- Vipps transaction ID
+
+  created_at            TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Index for fast availability lookups
-CREATE INDEX IF NOT EXISTS bookinger_dato_idx ON bookinger (dato);
+-- Indexes for fast availability lookups
+CREATE INDEX IF NOT EXISTS bookinger_dato_idx   ON bookinger (dato);
 CREATE INDEX IF NOT EXISTS bookinger_status_idx ON bookinger (status);
+CREATE INDEX IF NOT EXISTS bookinger_epost_idx  ON bookinger (epost);
 
 -- Enable Row Level Security
 ALTER TABLE bookinger ENABLE ROW LEVEL SECURITY;
 
--- Anyone can insert a booking (public form)
+-- Public can insert bookings
 CREATE POLICY "anon_insert_bookinger"
-  ON bookinger FOR INSERT
-  TO anon
+  ON bookinger FOR INSERT TO anon
   WITH CHECK (true);
 
--- Anyone can read bookings (needed to count availability)
--- Only exposes dato + rute — no personal info returned to frontend
+-- Public can read date/count data (for availability calendar)
 CREATE POLICY "anon_select_bookinger"
-  ON bookinger FOR SELECT
-  TO anon
+  ON bookinger FOR SELECT TO anon
   USING (true);
 
--- Authenticated users (admin) can update/delete
+-- Authenticated (admin) full access
 CREATE POLICY "auth_all_bookinger"
-  ON bookinger FOR ALL
-  TO authenticated
-  USING (true)
-  WITH CHECK (true);
+  ON bookinger FOR ALL TO authenticated
+  USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- Verify setup

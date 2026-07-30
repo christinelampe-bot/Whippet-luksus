@@ -701,6 +701,247 @@
       text-decoration: none;
     }
 
+    /* ── CONSENT ACCORDION ── */
+    .consent-accordion {
+      grid-column: 1 / -1;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin: 4px 0;
+    }
+
+    .consent-trigger {
+      width: 100%;
+      background: var(--mauve-pale);
+      border: none;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--mauve-dark);
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+      text-align: left;
+    }
+
+    .consent-trigger:hover { background: var(--mauve-light); }
+
+    .consent-trigger-left { display: flex; align-items: center; gap: 10px; }
+
+    .consent-required-badge {
+      background: rgba(229,57,53,0.1);
+      color: #C62828;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 50px;
+    }
+
+    .consent-arrow {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: transform 0.25s;
+    }
+
+    .consent-accordion.open .consent-arrow { transform: rotate(180deg); }
+
+    .consent-body {
+      display: none;
+      padding: 24px 24px 20px;
+      background: #fff;
+      border-top: 1px solid var(--border);
+    }
+
+    .consent-accordion.open .consent-body { display: block; }
+
+    .consent-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--mauve-mid);
+      margin: 18px 0 10px;
+    }
+
+    .consent-section-title:first-child { margin-top: 0; }
+
+    .consent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 580px) {
+      .consent-grid { grid-template-columns: 1fr; }
+    }
+
+    .consent-grid .form-group.full { grid-column: 1 / -1; }
+
+    .consent-checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+
+    .consent-checkbox-row:first-of-type { border-top: none; }
+
+    .consent-checkbox-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--mauve-deep);
+      cursor: pointer;
+    }
+
+    .consent-checkbox-row label {
+      font-size: 0.83rem;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .consent-checkbox-row label strong { color: var(--mauve-deep); }
+
+    select {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--mauve-pale);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    select:focus {
+      border-color: var(--mauve-deep);
+      box-shadow: 0 0 0 3px rgba(176,96,232,0.1);
+    }
+
+    /* ── VIPPS PANEL ── */
+    .vipps-panel {
+      background: #fff;
+      border-radius: var(--r-xl);
+      border: 2px solid var(--border);
+      padding: 40px 36px;
+      text-align: center;
+      display: none;
+      margin-top: 20px;
+    }
+
+    .vipps-panel.visible { display: block; }
+
+    .vipps-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .vipps-logo-circle {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #FF5B24;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .vipps-logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #FF5B24;
+    }
+
+    .vipps-panel h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      margin-bottom: 8px;
+    }
+
+    .vipps-panel p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 360px;
+      margin: 0 auto 24px;
+    }
+
+    .vipps-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--mauve-deep);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .btn-vipps {
+      background: #FF5B24;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 36px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-vipps:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .vipps-coming-soon {
+      opacity: 0.5;
+      position: relative;
+      pointer-events: none;
+    }
+
+    .vipps-coming-tag {
+      background: var(--mauve-light);
+      color: var(--mauve-mid);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    .vipps-skip {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .vipps-skip a {
+      color: var(--mauve-mid);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     /* ── ERROR MESSAGE ── */
     .error-msg {
       grid-column: 1 / -1;
@@ -830,14 +1071,132 @@
 
         <div class="abo-info" id="mndInfo">
           📅 <strong>Månedspakke — kr 1 000/mnd (49% spart)</strong><br/>
-          Opptil 5 dager per kalendermåned. Datoene kan spres fritt eller sammenhengende. Fornyes månedlig — avslutt når du vil. Vi kontakter deg for å bekrefte datoer.
+          Opptil 5 dager per kalendermåned. Datoene kan spres fritt eller sammenhengende. Vi kontakter deg for å bekrefte datoer. Fornyes automatisk månedlig — <strong>oppsigelse med 1 måneds varsel, gjeldende fra utgangen av en kalendermåned.</strong>
         </div>
 
         <hr class="form-divider" />
 
+        <!-- ── SAMTYKKESKJEMA ── -->
+        <div class="consent-accordion" id="consentAccordion">
+          <button type="button" class="consent-trigger" onclick="toggleConsent()">
+            <div class="consent-trigger-left">
+              🐾 Samtykkeskjema for din whippet
+              <span class="consent-required-badge">Påkrevd</span>
+            </div>
+            <span class="consent-arrow" id="consentArrow">▼</span>
+          </button>
+
+          <div class="consent-body" id="consentBody">
+
+            <!-- Hundens info -->
+            <div class="consent-section-title">Om hunden</div>
+            <div class="consent-grid">
+              <div class="form-group">
+                <label for="hund_kjonn">Kjønn</label>
+                <select id="hund_kjonn" name="hund_kjonn">
+                  <option value="">Velg…</option>
+                  <option value="hannhund">Hannhund</option>
+                  <option value="tispe">Tispe</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="hund_vekt">Vekt (kg)</label>
+                <input type="number" id="hund_vekt" name="hund_vekt" placeholder="f.eks. 11" min="5" max="30" step="0.5" />
+              </div>
+              <div class="form-group full">
+                <label for="hund_alder">Alder</label>
+                <input type="text" id="hund_alder" name="hund_alder" placeholder="f.eks. 2 år 4 måneder" />
+              </div>
+            </div>
+
+            <!-- Helse -->
+            <div class="consent-section-title">Helse &amp; vaksinasjoner</div>
+            <div class="consent-grid">
+              <div class="form-group full">
+                <label for="medisiner">Pågående medisiner / behandlinger</label>
+                <input type="text" id="medisiner" name="medisiner" placeholder="Ingen / beskriv her" />
+              </div>
+              <div class="form-group full">
+                <label for="allergier">Kjente allergier eller helsetilstander</label>
+                <input type="text" id="allergier" name="allergier" placeholder="Ingen / beskriv her" />
+              </div>
+              <div class="form-group">
+                <label for="siste_vaksine">Siste kombinasjonsvaksine (mnd/år)</label>
+                <input type="text" id="siste_vaksine" name="siste_vaksine" placeholder="f.eks. mars 2025" />
+              </div>
+              <div class="form-group">
+                <label for="loppebehandling">Siste loppe/flåttbehandling</label>
+                <input type="text" id="loppebehandling" name="loppebehandling" placeholder="f.eks. juni 2025" />
+              </div>
+            </div>
+
+            <!-- Veterinær -->
+            <div class="consent-section-title">Veterinær</div>
+            <div class="consent-grid">
+              <div class="form-group">
+                <label for="vet_navn">Veterinær / klinikk</label>
+                <input type="text" id="vet_navn" name="vet_navn" placeholder="Klinikknavn eller navn" />
+              </div>
+              <div class="form-group">
+                <label for="vet_telefon">Veterinærens telefon</label>
+                <input type="tel" id="vet_telefon" name="vet_telefon" placeholder="22 00 00 00" />
+              </div>
+            </div>
+
+            <!-- Nødkontakt -->
+            <div class="consent-section-title">Nødkontakt</div>
+            <div class="consent-grid">
+              <div class="form-group">
+                <label for="noedkontakt_navn">Navn</label>
+                <input type="text" id="noedkontakt_navn" name="noedkontakt_navn" placeholder="Kontaktperson" />
+              </div>
+              <div class="form-group">
+                <label for="noedkontakt_telefon">Telefon</label>
+                <input type="tel" id="noedkontakt_telefon" name="noedkontakt_telefon" placeholder="400 00 000" />
+              </div>
+            </div>
+
+            <!-- Atferd -->
+            <div class="consent-section-title">Atferd &amp; sosiale egenskaper</div>
+            <div class="consent-grid">
+              <div class="form-group full">
+                <label for="atferd">Beskriv hundens temperament (andre hunder, fremmede, løping)</label>
+                <textarea id="atferd" name="atferd" placeholder="f.eks. God med andre hunder, noe forsiktig med fremmede, løper ikke av…"></textarea>
+              </div>
+            </div>
+
+            <!-- Samtykker -->
+            <div class="consent-section-title">Samtykker</div>
+
+            <div class="consent-checkbox-row">
+              <input type="checkbox" id="samtykke_noedvet" name="samtykke_noedvet" required />
+              <label for="samtykke_noedvet">
+                Jeg <strong>godkjenner at Whippet Luksus kontakter veterinær i nødstilfeller</strong> dersom jeg ikke kan nås, og dekker kostnadene for nødbehandling.
+              </label>
+            </div>
+
+            <div class="consent-checkbox-row">
+              <input type="checkbox" id="samtykke_bilde" name="samtykke_bilde" />
+              <label for="samtykke_bilde">
+                Jeg godkjenner at bilder/video av hunden min kan deles på Whippet Luksus sine sosiale medier (Instagram, TikTok). Du kan trekke tilbake samtykket når som helst.
+              </label>
+            </div>
+
+            <div class="consent-checkbox-row">
+              <input type="checkbox" id="samtykke_vilkaar" name="samtykke_vilkaar" required />
+              <label for="samtykke_vilkaar">
+                Jeg bekrefter at hunden er en <strong>whippet</strong>, er à jour med vaksiner, og at opplysningene ovenfor er korrekte. Jeg har lest og godtar <strong>vilkårene for Whippet Luksus</strong>.
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── END SAMTYKKESKJEMA ── -->
+
         <div class="form-group full">
           <label for="melding">Melding (valgfri)</label>
-          <textarea id="melding" name="melding" placeholder="Eventuelle spørsmål, informasjon om hunden…"></textarea>
+          <textarea id="melding" name="melding" placeholder="Eventuelle spørsmål, andre ting vi bør vite…"></textarea>
         </div>
 
         <div class="error-msg" id="errorMsg"></div>
@@ -872,6 +1231,36 @@
     <button class="btn-new-booking" onclick="resetBooking()">Book en ny dag</button>
   </div>
 
+  <!-- Vipps payment panel -->
+  <div class="vipps-panel" id="vippsPanel">
+    <div class="vipps-logo">
+      <div class="vipps-logo-circle">V</div>
+      <div class="vipps-logo-text">Vipps</div>
+    </div>
+    <h3>Betal med Vipps</h3>
+    <p id="vippsDesc">Rask og enkel betaling direkte fra mobilen din.</p>
+    <div class="vipps-amount" id="vippsAmount">kr 395</div>
+    <div id="vippsActive" style="display:none">
+      <button class="btn-vipps" id="vippsBtn" onclick="payWithVipps()">
+        Åpne Vipps ›
+      </button>
+      <div class="vipps-skip">
+        <a onclick="document.getElementById('vippsPanel').classList.remove('visible')">
+          Betal ved oppmøte i stedet
+        </a>
+      </div>
+    </div>
+    <div id="vippsInactive">
+      <div class="vipps-coming-tag">Kommer snart</div>
+      <div class="vipps-coming-soon">
+        <button class="btn-vipps" disabled>Åpne Vipps ›</button>
+      </div>
+      <div class="vipps-skip" style="margin-top:14px;opacity:0.7">
+        Betaling skjer ved første oppmøte inntil Vipps er aktivert.
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <footer>
@@ -889,11 +1278,11 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── ROUTE CONFIG ──
 const RUTER = {
-  1: { name: 'Vindern & Holmenkollen', emoji: '🌲', maks: 6 },
-  2: { name: 'Nordstrand',             emoji: '🌊', maks: 6 },
-  3: { name: 'Høvik & Jar',            emoji: '🍃', maks: 6 },
-  4: { name: 'Oslo Sentrum',           emoji: '🏙️', maks: 4 },
-  5: { name: 'Lillestrøm & Rælingen',  emoji: '🌾', maks: 6 },
+  1: { name: 'Vindern & Holmenkollen', emoji: '🌲', maks: 8 },
+  2: { name: 'Nordstrand',             emoji: '🌊', maks: 8 },
+  3: { name: 'Høvik & Jar',            emoji: '🍃', maks: 8 },
+  4: { name: 'Oslo Sentrum',           emoji: '🏙️', maks: 8 },
+  5: { name: 'Lillestrøm & Rælingen',  emoji: '🌾', maks: 8 },
 };
 
 const UKEDAGER = ['mandag','tirsdag','onsdag','torsdag','fredag'];
@@ -1115,6 +1504,23 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   const hund_navn = document.getElementById('hund_navn').value.trim();
   const melding   = document.getElementById('melding').value.trim();
 
+  // Consent fields
+  const g = id => { const el = document.getElementById(id); return el ? el.value.trim() : null; };
+  const cb = id => { const el = document.getElementById(id); return el ? el.checked : false; };
+
+  // Validate required checkboxes
+  if (!cb('samtykke_noedvet')) {
+    // Open accordion so user can see
+    document.getElementById('consentAccordion').classList.add('open');
+    showError('Vennligst godkjenn nødveterinær-samtykket i samtykkeskjemaet.');
+    btn.classList.remove('loading'); btn.disabled = false; return;
+  }
+  if (!cb('samtykke_vilkaar')) {
+    document.getElementById('consentAccordion').classList.add('open');
+    showError('Vennligst godkjenn vilkårene i samtykkeskjemaet.');
+    btn.classList.remove('loading'); btn.disabled = false; return;
+  }
+
   // Final availability check
   const { count: booketNow } = await sb
     .from('bookinger')
@@ -1136,12 +1542,34 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     dato:      selectedDate,
     ukedag:    selectedUkedag,
     rute:      selectedRute,
-    navn,
-    epost,
-    telefon:   telefon || null,
-    hund_navn,
     type:      bookingType,
     status:    'bekreftet',
+    // Owner
+    navn, epost,
+    telefon:   telefon || null,
+    melding:   melding || null,
+    // Dog
+    hund_navn,
+    hund_kjonn:           g('hund_kjonn') || null,
+    hund_alder:           g('hund_alder') || null,
+    hund_vekt:            g('hund_vekt')  ? parseFloat(g('hund_vekt')) : null,
+    // Health
+    medisiner:            g('medisiner') || null,
+    allergier:            g('allergier') || null,
+    siste_vaksine:        g('siste_vaksine') || null,
+    loppebehandling:      g('loppebehandling') || null,
+    vet_navn:             g('vet_navn') || null,
+    vet_telefon:          g('vet_telefon') || null,
+    noedkontakt_navn:     g('noedkontakt_navn') || null,
+    noedkontakt_telefon:  g('noedkontakt_telefon') || null,
+    atferd:               g('atferd') || null,
+    // Samtykker
+    samtykke_noedvet:     cb('samtykke_noedvet'),
+    samtykke_bilde:       cb('samtykke_bilde'),
+    samtykke_vilkaar:     cb('samtykke_vilkaar'),
+    samtykke_dato:        new Date().toISOString(),
+    // Vipps
+    betaling_status: 'venter',
   });
 
   btn.classList.remove('loading');
@@ -1189,6 +1617,9 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   document.getElementById('selectHint').style.display = 'none';
   document.getElementById('successPanel').classList.add('visible');
 
+  // Show Vipps payment panel
+  showVippsPanel(bookingType);
+
   // Refresh availability
   await renderWeek();
 });
@@ -1206,10 +1637,65 @@ function resetBooking() {
   bookingType   = 'enkeltdag';
   document.getElementById('bookingForm').reset();
   document.getElementById('successPanel').classList.remove('visible');
+  document.getElementById('vippsPanel').classList.remove('visible');
   document.getElementById('selectHint').style.display = '';
   selectType('enkeltdag');
+  // Close consent accordion
+  document.getElementById('consentAccordion').classList.remove('open');
   renderWeek();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── CONSENT ACCORDION ──
+function toggleConsent() {
+  const acc = document.getElementById('consentAccordion');
+  acc.classList.toggle('open');
+}
+
+// ── VIPPS CONFIG ──
+// Set VIPPS_ENABLED = true and VIPPS_MERCHANT_PHONE to your Vipps number to activate
+const VIPPS_ENABLED       = false;
+const VIPPS_MERCHANT_PHONE = '00000000'; // Replace with your Vipps-registered phone number
+
+const VIPPS_AMOUNTS = {
+  enkeltdag:  395,
+  abonnement: 1399,
+  manedlig:   1000,
+};
+
+function showVippsPanel(type) {
+  const amount = VIPPS_AMOUNTS[type] || 395;
+  document.getElementById('vippsAmount').textContent = `kr ${amount.toLocaleString('nb-NO')}`;
+
+  if (type === 'manedlig') {
+    document.getElementById('vippsDesc').textContent =
+      'Første månedsbetaling. Fornyes automatisk månedlig — avslutt med 1 måneds varsel fra månedens utgang.';
+  } else if (type === 'abonnement') {
+    document.getElementById('vippsDesc').textContent = 'Forhåndsbetaling for 5-dagerspakken din.';
+  } else {
+    document.getElementById('vippsDesc').textContent = 'Betaling for enkeltdagen.';
+  }
+
+  document.getElementById('vippsActive').style.display   = VIPPS_ENABLED ? '' : 'none';
+  document.getElementById('vippsInactive').style.display = VIPPS_ENABLED ? 'none' : '';
+  document.getElementById('vippsPanel').classList.add('visible');
+
+  setTimeout(() => {
+    document.getElementById('vippsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function payWithVipps() {
+  if (!VIPPS_ENABLED) return;
+  const amount    = VIPPS_AMOUNTS[bookingType] || 395;
+  const amountOre = amount * 100;
+  const message   = encodeURIComponent('Whippet Luksus dagplass');
+  // Vipps deeplink for mobile
+  const deeplink  = `vipps://pay?phone=${VIPPS_MERCHANT_PHONE}&amount=${amountOre}&message=${message}`;
+  // Fallback to Vipps web for desktop
+  const weblink   = `https://qr.vipps.no/28/2/05/031/${VIPPS_MERCHANT_PHONE}?v=1&amount=${amountOre}&message=${message}`;
+  const isMobile  = /iPhone|iPad|Android/i.test(navigator.userAgent);
+  window.open(isMobile ? deeplink : weblink, '_blank');
 }
 
 // ── INIT ──
